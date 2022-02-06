@@ -28,39 +28,39 @@ const customNetworkOptions = {
     walletconnect: {
       package: WalletConnectProvider, // required
       options: {
-        infuraId: "INFURA_ID" // required
+        infuraId:process.env.NEXT_PUBLIC_INFURA_ID // required
       }
     },
-    fortmatic: {
-      package: Fortmatic, // required
-      options: {
-        key: "FORTMATIC_KEY", // required,
-        network: customNetworkOptions // if we don't pass it, it will default to localhost:8454
-      }
-    },
-    // torus: {
-    //   package: Torus, // required
+    // fortmatic: {
+    //   package: Fortmatic, // required
     //   options: {
-    //     networkParams: {
-    //       host: "https://localhost:8545", // optional
-    //       chainId: 1337, // optional
-    //       networkId: 1337 // optional
-    //     },
-    //     config: {
-    //       buildEnv: "development" // optional
-    //     }
+    //     key: "FORTMATIC_KEY", // required,
+    //     network: customNetworkOptions // if we don't pass it, it will default to localhost:8454
     //   }
     // },
-    portis: {
-      package: Portis, // required
-      options: {
-        id: "PORTIS_ID" // required
-      }
-    }
+    // // torus: {
+    // //   package: Torus, // required
+    // //   options: {
+    // //     networkParams: {
+    // //       host: "https://localhost:8545", // optional
+    // //       chainId: 1337, // optional
+    // //       networkId: 1337 // optional
+    // //     },
+    // //     config: {
+    // //       buildEnv: "development" // optional
+    // //     }
+    // //   }
+    // // },
+    // portis: {
+    //   package: Portis, // required
+    //   options: {
+    //     id: "PORTIS_ID" // required
+    //   }
+    // }
   };
 
   const ConnectWallet=async()=>{
-   const web3Modal = new Web3Modal({
+   web3Modal = new Web3Modal({
       network: "mainnet", // optional
       cacheProvider: true, // optional
       providerOptions, // required
