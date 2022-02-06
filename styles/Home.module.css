@@ -1,5 +1,6 @@
 .container {
   padding: 0 2rem;
+  background-color: #1f6d95;
 }
 
 .main {
@@ -10,13 +11,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: #1f6d95;
 }
 
 .footer {
   display: flex;
   flex: 1;
   padding: 2rem 0;
-  border-top: 1px solid #eaeaea;
+
   justify-content: center;
   align-items: center;
 }
@@ -77,19 +79,23 @@
   margin: 1rem;
   padding: 1.5rem;
   text-align: left;
-  color: inherit;
+  color: rgb(255, 255, 255);
   text-decoration: none;
-  border: 1px solid #eaeaea;
-  border-radius: 10px;
   transition: color 0.15s ease, border-color 0.15s ease;
   max-width: 300px;
+  border-radius: 23px;
+background: linear-gradient(145deg, #1a5c7d, #1f6d95);
+box-shadow:  12px 12px 6px #1a5a7a;
 }
 
 .card:hover,
 .card:focus,
 .card:active {
-  color: #0070f3;
+  color: #e9f1fb;
   border-color: #0070f3;
+  background: linear-gradient(180deg, #1a5c7d, #1f6d95);
+  box-shadow:  5px 5px 6px #1a5a7a,
+             -5px -5px 6px #00446625;
 }
 
 .card h2 {

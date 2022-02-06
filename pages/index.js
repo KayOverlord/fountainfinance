@@ -1,8 +1,116 @@
+import React, { useEffect } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import Web3 from "web3";
+import Web3Modal from "web3modal";
+import Fortmatic from "fortmatic";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+// import Torus from "@toruslabs/torus-embed";
+import Portis from "@portis/web3";
 
 export default function Home() {
+
+  // Web3modal instance
+let web3Modal
+// Chosen wallet provider given by the dialog window
+let provider;
+// Address of the selected account
+let selectedAccount;
+  // Example for Polygon/Matic:
+const customNetworkOptions = {
+  rpcUrl: 'https://rpc-mainnet.maticvigil.com',
+  chainId: 137
+}
+
+  const providerOptions = {
+  
+    walletconnect: {
+      package: WalletConnectProvider, // required
+      options: {
+        infuraId: "INFURA_ID" // required
+      }
+    },
+    fortmatic: {
+      package: Fortmatic, // required
+      options: {
+        key: "FORTMATIC_KEY", // required,
+        network: customNetworkOptions // if we don't pass it, it will default to localhost:8454
+      }
+    },
+    // torus: {
+    //   package: Torus, // required
+    //   options: {
+    //     networkParams: {
+    //       host: "https://localhost:8545", // optional
+    //       chainId: 1337, // optional
+    //       networkId: 1337 // optional
+    //     },
+    //     config: {
+    //       buildEnv: "development" // optional
+    //     }
+    //   }
+    // },
+    portis: {
+      package: Portis, // required
+      options: {
+        id: "PORTIS_ID" // required
+      }
+    }
+  };
+
+  const ConnectWallet=async()=>{
+   const web3Modal = new Web3Modal({
+      network: "mainnet", // optional
+      cacheProvider: true, // optional
+      providerOptions, // required
+      theme: "dark"
+    });
+    web3Modal.toggleModal().then((data)=>{
+      onConnect();
+    });
+  }
+
+const onConnect=async()=>{
+
+    console.log("Opening a dialog", web3Modal);
+    try {
+      provider = await web3Modal.connect();
+    } catch(e) {
+      console.log("Could not get a wallet connection", e);
+      return;
+    }
+  
+    // Subscribe to accounts change
+    provider.on("accountsChanged", (accounts) => {
+      //fetchAccountData();
+      console.log("accounts",accounts)
+    });
+  
+    // Subscribe to chainId change
+    provider.on("chainChanged", (chainId) => {
+      //fetchAccountData();
+
+      console.log("chain ID",chainId)
+    });
+  
+  }
+
+  const onDisconnect=async()=>{
+
+    console.log("Killing the wallet connection", provider);
+  
+    // TODO: Which providers have close method?
+    if(provider.close) {
+      await provider.close();
+      await web3Modal.clearCachedProvider();
+      provider = null;
+    }
+  
+    selectedAccount = '';
+  
+  }
+  
   return (
     <div className={styles.container}>
       <Head>
@@ -13,12 +121,14 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Welcome to Fountain Finance
         </h1>
 
         <p className={styles.description}>
           Get started by editing{' '}
           <code className={styles.code}>pages/index.js</code>
+          <button onClick={()=>ConnectWallet()}>CONNECT</button>
+          <button onClick={()=>onDisconnect()}>DISCONNECT</button>
         </p>
 
         <div className={styles.grid}>

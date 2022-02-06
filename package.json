@@ -8,9 +8,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@burner-wallet/burner-connect-provider": "^0.1.1",
+    "@myetherwallet/mewconnect-web-client": "^2.2.0-beta.16",
+    "@portis/web3": "^4.0.7",
+    "@toruslabs/torus-embed": "^1.20.4",
+    "@venly/web3-provider": "^0.27.0",
+    "@walletconnect/web3-provider": "^1.7.1",
+    "authereum": "^0.1.14",
+    "bitski": "^0.11.0",
+    "dcent-provider": "^0.3.0-beta",
+    "eth-provider": "^0.10.0",
+    "fortmatic": "^2.2.1",
     "next": "12.0.10",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "walletlink": "^2.4.6",
+    "web3": "^1.7.0",
+    "web3modal": "^1.9.5"
   },
   "devDependencies": {
     "eslint": "8.8.0",
