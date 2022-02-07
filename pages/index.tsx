@@ -11,8 +11,7 @@ import Portis from "@portis/web3";
 
 export default function Home() {
 
-  // Web3modal instance
-let web3Modal
+  let web3Modal;
 // Chosen wallet provider given by the dialog window
 let provider;
 // Address of the selected account
@@ -59,29 +58,25 @@ const customNetworkOptions = {
     // }
   };
 
-  const ConnectWallet=async()=>{
-   web3Modal = new Web3Modal({
+ useEffect(() => {
+  const sub =async()=>{
+    web3Modal = new Web3Modal({
       network: "mainnet", // optional
       cacheProvider: true, // optional
       providerOptions, // required
       theme: "dark"
     });
-    web3Modal.toggleModal().then((data)=>{
-      onConnect();
-    });
-  }
+    
+   }
+sub();
 
-const onConnect=async()=>{
+ }, [])
 
-    console.log("Opening a dialog", web3Modal);
-    try {
-      provider = await web3Modal.connect();
-    } catch(e) {
-      console.log("Could not get a wallet connection", e);
-      return;
-    }
-  
-    // Subscribe to accounts change
+ 
+
+  const ConnectWallet=async()=>{
+      provider = await web3Modal.connect();  
+      // Subscribe to accounts change
     provider.on("accountsChanged", (accounts) => {
       //fetchAccountData();
       console.log("accounts",accounts)
@@ -93,15 +88,20 @@ const onConnect=async()=>{
 
       console.log("chain ID",chainId)
     });
-  
+    
+    provider.on("wallet_requestPermissions",(message)=>{
+      console.log("chain ID",message)
+    })
   }
+
+
 
   const onDisconnect=async()=>{
 
     console.log("Killing the wallet connection", provider);
   
     // TODO: Which providers have close method?
-    if(provider.close) {
+    if(provider?.close) {
       await provider.close();
       await web3Modal.clearCachedProvider();
       provider = null;
