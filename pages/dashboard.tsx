@@ -18,6 +18,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { theme } from '../styles/Theme';
+import styles from '../styles/Home.module.css';
+import Card from '@mui/material/Card';
+import Button from '@mui/material/Button';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import TextField from '@mui/material/TextField';
 //import { mainListItems, secondaryListItems } from './listItems';
 
 
@@ -94,13 +101,13 @@ function DashboardContent() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
-              pr: '24px', // keep right padding when drawer closed
-              backgroundColor:theme.palette.background.paper
+              pr: "24px", // keep right padding when drawer closed
+              backgroundColor: theme.palette.background.paper,
             }}
           >
             <IconButton
@@ -109,8 +116,8 @@ function DashboardContent() {
               aria-label="open drawer"
               onClick={toggleDrawer}
               sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
+                marginRight: "36px",
+                ...(open && { display: "none" }),
               }}
             >
               <MenuIcon />
@@ -122,9 +129,10 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Happy Farming
+              Happy Fountain Farming
             </Typography>
             <IconButton color="inherit">
+              <Button>Hello </Button>
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
@@ -134,9 +142,9 @@ function DashboardContent() {
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
               px: [1],
             }}
           >
@@ -146,19 +154,16 @@ function DashboardContent() {
           </Toolbar>
           <Divider />
           <List component="nav">
-           
             <Divider sx={{ my: 1 }} />
-           
           </List>
         </Drawer>
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.background.default,
+            backgroundColor: (theme) => theme.palette.background.default,
             flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
+            height: "100vh",
+            overflow: "auto",
           }}
         >
           <Toolbar />
@@ -169,31 +174,64 @@ function DashboardContent() {
                 <Paper
                   sx={{
                     p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
+                    display: "flex",
+                    flexDirection: "column",
                     height: 240,
                   }}
-                >
-                 
-                </Paper>
+                ></Paper>
               </Grid>
               {/* Recent Deposits */}
               <Grid item xs={12} md={4} lg={3}>
                 <Paper
                   sx={{
                     p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
+                    display: "flex",
+                    flexDirection: "column",
                     height: 240,
                   }}
-                >
-                
-                </Paper>
+                ></Paper>
               </Grid>
               {/* Recent Orders */}
               <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
                  
+                    <Accordion className={styles.card}>
+                      <AccordionSummary
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                         <Typography>
+                          USDC/MATIC
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                       
+                        <TextField
+                          label="Deposit"
+                          id="outlined-size-small"
+                          defaultValue="0.0"
+                          size="small"
+                        />
+                        <Button 
+                        variant="contained"
+                        style={{marginTop:15}}
+                        >
+                          APPROVE
+                        </Button>
+                        <Typography variant="overline" style={{
+                          textTransform:"none",
+                          lineHeight: 'normal',
+                          color:"gray",
+                          marginTop:8,
+                          display:"flex",
+                          justifyContent: 'center',
+                          alignItems: 'center'}}
+                           display="block">
+                          You will receive Goli token as a
+                         receipt for your deposited BOOK-MATIC LP assets.</Typography>
+                      </AccordionDetails>
+                    </Accordion>
+                
                 </Paper>
               </Grid>
             </Grid>
