@@ -23,6 +23,7 @@
     "bitski": "^0.11.0",
     "dcent-provider": "^0.3.0-beta",
     "eth-provider": "^0.10.0",
+    "formik": "^2.2.9",
     "fortmatic": "^2.2.1",
     "next": "12.0.10",
     "react": "17.0.2",
@@ -30,7 +31,8 @@
     "styled-components": "^5.3.3",
     "walletlink": "^2.4.6",
     "web3": "^1.7.0",
-    "web3modal": "^1.9.5"
+    "web3modal": "^1.9.5",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "eslint": "8.8.0",

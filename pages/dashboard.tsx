@@ -13,7 +13,7 @@ import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
+import Copyright from '../components/CopyRight'
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -25,21 +25,10 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import TextField from '@mui/material/TextField';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { useState } from 'react';
 //import { mainListItems, secondaryListItems } from './listItems';
 
-
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const drawerWidth: number = 240;
 
@@ -93,11 +82,29 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 
-function DashboardContent() {
-  const [open, setOpen] = React.useState(true);
+const Dashboard =()=>{
+  const [open, setOpen] = useState(true);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("")
+  const [deposit,setDeposit] = useState("");
+  const [withdraw,setWithdraw] = useState("")
+
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const handleChange = (e) => {
+    e.preventDefault()
+    setDeposit(e.target.value);
+  }
+
+  const WithdrawHandleChange =(e)=>{
+    e.preventDefault()
+    setWithdraw(e.target.value);
+  }
+
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -132,10 +139,9 @@ function DashboardContent() {
               Happy Fountain Farming
             </Typography>
             <IconButton color="inherit">
-              <Button>Hello </Button>
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
+              <Button variant="contained" color="primary" endIcon={<PowerSettingsNewIcon/>}>
+                Hello 
+              </Button>
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -194,44 +200,60 @@ function DashboardContent() {
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                 
-                    <Accordion className={styles.card}>
-                      <AccordionSummary
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                      >
-                         <Typography>
-                          USDC/MATIC
-                        </Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                       
+                  <Accordion className={styles.card}>
+                    <AccordionSummary
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography>USDC/MATIC</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                  
                         <TextField
+                          variant="outlined" 
                           label="Deposit"
-                          id="outlined-size-small"
-                          defaultValue="0.0"
+                          id="Deposit"
                           size="small"
+                          value={deposit}
+                          onChange={handleChange}
+                          error={error}
+                          helperText={errorMessage}
                         />
-                        <Button 
-                        variant="contained"
-                        style={{marginTop:15}}
-                        >
-                          APPROVE
+                        <Button type="submit" variant="contained" style={{ marginTop: 18,marginBottom: 15 }}>
+                          Deposit your MATIC
                         </Button>
-                        <Typography variant="overline" style={{
-                          textTransform:"none",
-                          lineHeight: 'normal',
-                          color:"gray",
-                          marginTop:8,
-                          display:"flex",
-                          justifyContent: 'center',
-                          alignItems: 'center'}}
-                           display="block">
-                          You will receive Goli token as a
-                         receipt for your deposited BOOK-MATIC LP assets.</Typography>
-                      </AccordionDetails>
-                    </Accordion>
-                
+                        <TextField
+                          variant="outlined" 
+                          label="Withdraw"
+                          id="Withdraw"
+                          size="small"
+                          value={withdraw}
+                          onChange={WithdrawHandleChange}
+                          error={error}
+                          helperText={errorMessage}
+                        />
+                        <Button type="submit" variant="contained" style={{ marginTop: 15 }}>
+                          Withdraw your MATIC and Rewards
+                        </Button>
+                      
+                      <Typography
+                        variant="overline"
+                        style={{
+                          textTransform: "none",
+                          lineHeight: "normal",
+                          color: "gray",
+                          marginTop: 8,
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        display="block"
+                      >
+                        You will receive Goli token as a receipt for your
+                        deposited BOOK-MATIC LP assets.
+                      </Typography>
+                    </AccordionDetails>
+                  </Accordion>
                 </Paper>
               </Grid>
             </Grid>
@@ -243,6 +265,4 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
-  return <DashboardContent />;
-}
+export default Dashboard

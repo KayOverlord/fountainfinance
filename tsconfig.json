@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "styles/Theme.tsx"  ],
+, "styles/Theme.tsx", "hooks/Web3Contaxt.tsx"  ],
   "exclude": [
     "node_modules"
   ]

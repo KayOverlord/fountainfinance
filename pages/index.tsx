@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Grid from '@mui/material/Grid';
@@ -10,8 +9,13 @@ import { theme } from '../styles/Theme';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
+import { useWeb3 } from '../hooks/Web3Contaxt';
 
-export default function Home() {
+
+
+const Home=()=>{
+
+  const {connectWeb3}=useWeb3();
 
   let web3Modal;
 // Chosen wallet provider given by the dialog window
@@ -74,39 +78,6 @@ sub();
 
  }, [])
 
- 
-
-  const ConnectWallet = async () => {
-    provider = await web3Modal.connect();
-    const web3 = new Web3(provider);
-    web3.eth.getAccounts().then(async (addr: string[]) => {
-                 router.push('/dashboard');
-               });
-    
-    // Subscribe to accounts change
-    provider.on("accountsChanged", (accounts) => {
-      //console.log("accounts", accounts);
-    });
-
-    // Subscribe to chainId change
-    provider.on("chainChanged", (chainId) => {
-   
-      //console.log("chain ID", chainId);
-    });
-
-    // Subscribe to provider connection
-    provider.on("connect", (info: { chainId: number }) => {
-      router.push('/dashboard');
-      //console.log(info);
-    });
-
-    // Subscribe to provider disconnection
-    provider.on("disconnect", (error: { code: number; message: string }) => {
-      router.push('/');
-      //console.log(error);
-    });
-  };
-
 
 
   const onDisconnect=async()=>{
@@ -145,7 +116,7 @@ sub();
 
         <Grid container spacing={2} style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
           <Grid item >
-          <Button variant="contained" color="primary" onClick={()=>ConnectWallet()}>CONNECT</Button>
+          <Button variant="contained" color="primary" onClick={()=>connectWeb3()}>CONNECT</Button>
           </Grid>
 
           <Grid item >
@@ -169,3 +140,4 @@ sub();
     </div>
   )
 }
+export default Home
