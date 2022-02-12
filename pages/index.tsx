@@ -14,86 +14,7 @@ import { useWeb3 } from '../hooks/Web3Contaxt';
 
 
 const Home=()=>{
-
-  const {connectWeb3}=useWeb3();
-
-  let web3Modal;
-// Chosen wallet provider given by the dialog window
-let provider;
-// Address of the selected account
-let selectedAccount;
-  // Example for Polygon/Matic:
-const customNetworkOptions = {
-  rpcUrl: 'https://rpc-mainnet.maticvigil.com',
-  chainId: 137
-}
-const router = useRouter();
-  const providerOptions = {
-  
-    walletconnect: {
-      package: WalletConnectProvider, // required
-      options: {
-        infuraId:process.env.NEXT_PUBLIC_INFURA_ID // required
-      }
-    },
-    // fortmatic: {
-    //   package: Fortmatic, // required
-    //   options: {
-    //     key: "FORTMATIC_KEY", // required,
-    //     network: customNetworkOptions // if we don't pass it, it will default to localhost:8454
-    //   }
-    // },
-    // // torus: {
-    // //   package: Torus, // required
-    // //   options: {
-    // //     networkParams: {
-    // //       host: "https://localhost:8545", // optional
-    // //       chainId: 1337, // optional
-    // //       networkId: 1337 // optional
-    // //     },
-    // //     config: {
-    // //       buildEnv: "development" // optional
-    // //     }
-    // //   }
-    // // },
-    // portis: {
-    //   package: Portis, // required
-    //   options: {
-    //     id: "PORTIS_ID" // required
-    //   }
-    // }
-  };
-
- useEffect(() => {
-  const sub =async()=>{
-    web3Modal = new Web3Modal({
-      network: "mainnet", // optional
-      cacheProvider: true, // optional
-      providerOptions, // required
-      theme: "dark"
-    });
-    
-   }
-sub();
-
- }, [])
-
-
-
-  const onDisconnect=async()=>{
-
-    console.log("Killing the wallet connection", provider);
-  
-    // TODO: Which providers have close method?
-    if(provider?.disconnect) {
-      await provider.disconnect();
-      await web3Modal.clearCachedProvider();
-      provider = null;
-    }
-  
-    selectedAccount = '';
-  
-  }
+const {connectWallet}=useWeb3();
   
   return (
     <div className={styles.container} style={{background:theme.palette.background.default}}>
@@ -116,11 +37,7 @@ sub();
 
         <Grid container spacing={2} style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
           <Grid item >
-          <Button variant="contained" color="primary" onClick={()=>connectWeb3()}>CONNECT</Button>
-          </Grid>
-
-          <Grid item >
-          <Button variant="contained" color="primary" onClick={()=>onDisconnect()}>DISCONNECT</Button>
+          <Button variant="contained" color="primary" onClick={()=>connectWallet()}>CONNECT</Button>
           </Grid>
         </Grid>
       </main>
