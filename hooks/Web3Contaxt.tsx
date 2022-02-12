@@ -67,36 +67,55 @@ export const Web3Provider=({children})=>{
        }, [])
 
 const connectWeb3=async()=>{
-    provider = await web3Modal.connect();
-    const web3 = new Web3(provider);
-    web3.eth.getAccounts().then(async (addr:string[]) => {
-      return setAddress(addr);
-                
-    });
-    
-    // Subscribe to accounts change
+  if(web3Modal){
+  web3Modal.clearCachedProvider();
+  }
+  try {
+    web3Modal.connect().then((data)=>{
+      provider = data;
+       
     provider.on("accountsChanged", (accounts) => {
       console.log("accounts", accounts);
     });
 
     // Subscribe to chainId change
     provider.on("chainChanged", (chainId) => {
-   
+      fatchAccountData()
       console.log("chain ID", chainId);
     });
 
     // Subscribe to provider connection
     provider.on("connect", (info) => {
-     
+      fatchAccountData()
       console.log(info);
     });
 
     // Subscribe to provider disconnection
-    provider.on("disconnect", (error) => {
+    provider.on("disconnect", (info) => {
      
-      console.log(error);
+      console.log(info);
     });
+    }).catch((error)=>{
+      switch (error.code) {
+        case 4001:
+          console.log("rejected")
+          break;
+        default:
+          break;
+      }
+    })
+  } catch (error) {
+  }
+  
     return null;
+}
+
+const fatchAccountData=()=>{
+  const web3 = new Web3(provider);
+    web3.eth.getAccounts().then(async (addr:string[]) => {
+      return setAddress(addr);
+                
+    });
 }
 
 const disconnectWallet =async()=>{

@@ -27,6 +27,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import TextField from '@mui/material/TextField';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { useState } from 'react';
+import { useWeb3 } from '../hooks/Web3Contaxt';
 //import { mainListItems, secondaryListItems } from './listItems';
 
 
@@ -87,9 +88,9 @@ const Dashboard =()=>{
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("")
   const [deposit,setDeposit] = useState("");
-  const [withdraw,setWithdraw] = useState("")
-
-
+  const [withdraw,setWithdraw] = useState("");
+  const {address}=useWeb3();
+  
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -140,7 +141,7 @@ const Dashboard =()=>{
             </Typography>
             <IconButton color="inherit">
               <Button variant="contained" color="primary" endIcon={<PowerSettingsNewIcon/>}>
-                Hello 
+                {address} 
               </Button>
             </IconButton>
           </Toolbar>
