@@ -148,9 +148,11 @@ const Dashboard =()=>{
               Happy Fountain Farming
             </Typography>
             <IconButton color="inherit">
-              <Button variant="contained" color="primary" endIcon={<PowerSettingsNewIcon/>}
+              <Button variant="contained" style={{width: "9rem"}} color="primary" endIcon={<PowerSettingsNewIcon/>}
               onClick={() => disconnectWallet()}>
-                {address} 
+                <div >
+                <Typography textOverflow="ellipsis" noWrap style={{width: "6rem"}} >{address} </Typography>
+                </div>
               </Button>
             </IconButton>
           </Toolbar>

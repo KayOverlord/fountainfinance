@@ -18,6 +18,7 @@ export const Web3Provider=({children})=>{
   const [provider,setProvider]=useState(null);
   const [web3Modal,setWeb3Modal]=useState(null);
   
+  
     
       // Chosen wallet provider given by the dialog window
       let web3;
@@ -103,7 +104,6 @@ const fatchAccountData=()=>{
 const disconnectWallet =async()=>{
    // TODO: Which providers have close method?
   if(provider!==undefined) {
-    console.log("Disconnect",provider)
 
     // If the cached provider is not cleared,
     // WalletConnect will default to the existing session
@@ -111,7 +111,7 @@ const disconnectWallet =async()=>{
     // Depending on your use case you may want or want not his behavir.
     await web3Modal.clearCachedProvider();
     setProvider(null);
-    setConnected(false)
+    setConnected(false);
     
   }else{
     setConnected(false)
