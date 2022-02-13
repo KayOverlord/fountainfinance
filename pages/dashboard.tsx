@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{ useEffect, useState } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -26,8 +26,8 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import TextField from '@mui/material/TextField';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { useState } from 'react';
 import { useWeb3 } from '../hooks/Web3Contaxt';
+import { useRouter } from 'next/router';
 //import { mainListItems, secondaryListItems } from './listItems';
 
 
@@ -89,8 +89,16 @@ const Dashboard =()=>{
   const [errorMessage, setErrorMessage] = useState("")
   const [deposit,setDeposit] = useState("");
   const [withdraw,setWithdraw] = useState("");
-  const {address}=useWeb3();
-  
+  const {address,connected,disconnectWallet}=useWeb3();
+  const router = useRouter();
+
+  useEffect(() => {
+    if(connected==false){
+      router.push("/");
+     
+    }
+  }, [!connected])
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -140,7 +148,8 @@ const Dashboard =()=>{
               Happy Fountain Farming
             </Typography>
             <IconButton color="inherit">
-              <Button variant="contained" color="primary" endIcon={<PowerSettingsNewIcon/>}>
+              <Button variant="contained" color="primary" endIcon={<PowerSettingsNewIcon/>}
+              onClick={() => disconnectWallet()}>
                 {address} 
               </Button>
             </IconButton>

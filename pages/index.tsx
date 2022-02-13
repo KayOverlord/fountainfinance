@@ -14,8 +14,18 @@ import { useWeb3 } from '../hooks/Web3Contaxt';
 
 
 const Home=()=>{
-const {connectWallet}=useWeb3();
+const {connectWallet,connected}=useWeb3();
+const router = useRouter();
   
+useEffect(() => {
+  
+  if(connected==true){
+    router.push("/dashboard")
+  }
+}, [!connected]);
+
+
+
   return (
     <div className={styles.container} style={{background:theme.palette.background.default}}>
       <Head>
