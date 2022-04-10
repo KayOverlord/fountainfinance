@@ -5,7 +5,6 @@ import {providerOptions} from "../util/Web3Provider"
 
 
 
-
 const context = createContext<null|any>("");
 
 export const useWeb3=()=>{
@@ -35,7 +34,17 @@ export const Web3Provider=({children})=>{
          }
       sub();
       
-       }, [])
+       }, []);
+
+
+       useEffect(() => {
+        if(window.ethereum) {
+          window.ethereum.on('disconnect', () => {
+            setConnected(false)
+            console.log("Websocket Provider connection disconnected!");
+          })
+        }
+      },[])
 
 const connectWallet=async()=>{
   if(web3Modal){
@@ -82,9 +91,8 @@ if(provider){
 }
 
 
-    return;
+    return;  
 }
-
 
 const fatchAccountData=()=>{
   web3.eth.net.isListening(function (error, result) {

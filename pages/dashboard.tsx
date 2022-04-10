@@ -18,17 +18,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { theme } from '../styles/Theme';
-import styles from '../styles/Home.module.css';
-import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import TextField from '@mui/material/TextField';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { useWeb3 } from '../hooks/Web3Contaxt';
 import { useRouter } from 'next/router';
+import Cards from '../components/Cards';
 //import { mainListItems, secondaryListItems } from './listItems';
+
 
 
 const drawerWidth: number = 240;
@@ -85,10 +81,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const Dashboard =()=>{
   const [open, setOpen] = useState(true);
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("")
+  const [depositError, setError] = useState(false);
+  const [depositErrorMessage, setErrorMessage] = useState("");
   const [deposit,setDeposit] = useState("");
   const [withdraw,setWithdraw] = useState("");
+  const [WithdrawError,setWithdrawError]= useState(false);
+  const [WithdrawErrorMessage,setWithdrawErrorMessage]=useState("");
   const {address,connected,disconnectWallet}=useWeb3();
   const router = useRouter();
 
@@ -212,60 +210,17 @@ const Dashboard =()=>{
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Accordion className={styles.card}>
-                    <AccordionSummary
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography>USDC/MATIC</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                  
-                        <TextField
-                          variant="outlined" 
-                          label="Deposit"
-                          id="Deposit"
-                          size="small"
-                          value={deposit}
-                          onChange={handleChange}
-                          error={error}
-                          helperText={errorMessage}
-                        />
-                        <Button type="submit" variant="contained" style={{ marginTop: 18,marginBottom: 15 }}>
-                          Deposit your MATIC
-                        </Button>
-                        <TextField
-                          variant="outlined" 
-                          label="Withdraw"
-                          id="Withdraw"
-                          size="small"
-                          value={withdraw}
-                          onChange={WithdrawHandleChange}
-                          error={error}
-                          helperText={errorMessage}
-                        />
-                        <Button type="submit" variant="contained" style={{ marginTop: 15 }}>
-                          Withdraw your MATIC and Rewards
-                        </Button>
-                      
-                      <Typography
-                        variant="overline"
-                        style={{
-                          textTransform: "none",
-                          lineHeight: "normal",
-                          color: "gray",
-                          marginTop: 8,
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                        display="block"
-                      >
-                        You will receive Goli token as a receipt for your
-                        deposited BOOK-MATIC LP assets.
-                      </Typography>
-                    </AccordionDetails>
-                  </Accordion>
+                 <Cards 
+                 title={"USDC"}
+                 deposit={deposit} 
+                 handleChange={handleChange} 
+                 depositError={depositError}
+                 depositErrorMessage={depositErrorMessage}
+                 withdraw={withdraw}
+                 WithdrawHandleChange={WithdrawHandleChange}
+                 WithdrawError={WithdrawError}
+                 WithdrawErrorMessage={WithdrawErrorMessage}
+                 />
                 </Paper>
               </Grid>
             </Grid>
