@@ -50,7 +50,7 @@ function Cards(props) {
               error={props.WithdrawError}
               helperText={props.WithdrawErrorMessage}
             /> */}
-            <Button type="submit" variant="contained" style={{ marginTop: 15,marginBottom: 15,width:"100%" }}>
+            <Button  variant="contained" style={{ marginTop: 15,marginBottom: 15,width:"100%" }}>
               Withdraw your Rewards
             </Button>
           
@@ -67,7 +67,7 @@ function Cards(props) {
             }}
             display="block"
           >
-            You will receive Goli tokens as a receipt for your
+            You will receive Goli tokens as a reward for your
             deposited {props.title} tokens.
           </Typography>
         </AccordionDetails>
