@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect,useState } from "react"
 import Web3 from "web3";
 import Web3Modal from "web3modal";
+import { networkMap } from "../Api/networks";
 import {providerOptions} from "../util/Web3Provider"
 
 
@@ -94,18 +95,50 @@ if(provider){
     return;  
 }
 
-const fatchAccountData=()=>{
-  web3.eth.net.isListening(function (error, result) {
-    if (error) {
-      console.error(error);
-    } else {
-      setConnected(result);
-    }
-  });
-    web3.eth.getAccounts().then(async (addr:string[]) => {
-      return setAddress(addr);
-                
+
+const fatchAccountData=async()=>{
+  // Check if MetaMask is installed
+ // MetaMask injects the global API into window.ethereum
+ if (window.ethereum) {
+  try {
+    // check if the chain to connect to is installed
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: Web3.utils.toHex(137) }], // chainId must be in hexadecimal numbers
     });
+  } catch (error) {
+    console.log(error,error.code);
+    // This error code indicates that the chain has not been added to MetaMask
+    // if it is not, then install it into the user MetaMask
+    if (error.code === 4902) {
+      try {
+       await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [networkMap.POLYGON_MAINNET],
+        }).then(() => {
+          web3.eth.net.isListening(function (error, result) {
+            if (error) {
+              console.error(error);
+            } else {
+              setConnected(result);
+            }
+          });
+            web3.eth.getAccounts().then(async (addr:string[]) => {
+              return setAddress(addr);
+                        
+            });
+        });
+      } catch (addError) {
+        console.error("addError", addError);
+      }
+    }
+    console.error(error);
+  }
+} else {
+  // if no window.ethereum then MetaMask is not installed
+  alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
+} 
+  
    
 }
 
