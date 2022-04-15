@@ -13,7 +13,7 @@ return useContext(context)
 
 export const Web3Provider=({children})=>{
   const [address,setAddress]=useState<string[]>();
-  const [connected,setConnected]=useState(false);
+  const [connected,setConnected]=useState(true);
   const [provider,setProvider]=useState(null);
   const [web3Modal,setWeb3Modal]=useState(null);
   

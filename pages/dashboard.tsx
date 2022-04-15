@@ -23,6 +23,7 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { useWeb3 } from '../hooks/Web3Contaxt';
 import { useRouter } from 'next/router';
 import Cards from '../components/Cards';
+import { LP_Tokens } from '../Api/data';
 //import { mainListItems, secondaryListItems } from './listItems';
 
 
@@ -90,6 +91,7 @@ const Dashboard =()=>{
   const {address,connected,disconnectWallet}=useWeb3();
   const router = useRouter();
 
+  LP_Tokens
   useEffect(() => {
     if(connected==false){
       router.push("/");
@@ -196,7 +198,7 @@ const Dashboard =()=>{
                   }}
                 ></Paper>
               </Grid>
-              {/* Recent Deposits */}
+
               <Grid item xs={12} md={4} lg={3}>
                 <Paper
                   sx={{
@@ -207,11 +209,14 @@ const Dashboard =()=>{
                   }}
                 ></Paper>
               </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                 <Cards 
-                 title={"USDC"}
+
+              { LP_Tokens&&LP_Tokens.map((val,index)=>{
+                  return(
+              <Grid item xs={12} md={4} lg={4} key={index} >
+             
+                <Paper sx={{ p:3, display: "flex", flexDirection: "column",width:"100%" }}>              
+                 <Cards
+                 title={val.title}
                  deposit={deposit} 
                  handleChange={handleChange} 
                  depositError={depositError}
@@ -222,9 +227,14 @@ const Dashboard =()=>{
                  WithdrawErrorMessage={WithdrawErrorMessage}
                  />
                 </Paper>
+                
               </Grid>
+              )
+
+            })
+            }
             </Grid>
-            <Copyright sx={{ pt: 4 }} />
+          
           </Container>
         </Box>
       </Box>
