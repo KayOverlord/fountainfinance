@@ -37,7 +37,7 @@ function Cards(props) {
               error={props.WithdrawError}
               helperText={props.WithdrawErrorMessage}
             />
-            <Button type="submit" variant="contained" style={{ marginTop: 15,width:"100%"  }}>
+            <Button  variant="contained" style={{ marginTop: 15,width:"100%"  }}>
               Withdraw your MATIC
             </Button>
             {/* <TextField

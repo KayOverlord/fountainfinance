@@ -16,7 +16,7 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { useWeb3 } from '../hooks/Web3Contaxt';
 import { useRouter } from 'next/router';
 import Cards from '../components/Cards';
-import { LP_Tokens } from '../Api/data';
+import { LP_Tokens } from '../Api/tokens';
 //import { mainListItems, secondaryListItems } from './listItems';
 
 

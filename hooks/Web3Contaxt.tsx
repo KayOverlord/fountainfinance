@@ -104,10 +104,21 @@ const fatchAccountData=async()=>{
     // check if the chain to connect to is installed
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
-      params: [{ chainId: Web3.utils.toHex(137) }], // chainId must be in hexadecimal numbers
+      params: [{ chainId: web3.utils.toHex(137) }], // chainId must be in hexadecimal numbers
+    }).then(() => {
+      web3.eth.net.isListening(function (error, result) {
+        if (error) {
+          console.error(error);
+        } else {
+          setConnected(result);
+        }
+      });
+        web3.eth.getAccounts().then(async (addr:string[]) => {
+          return setAddress(addr);
+                    
+        });
     });
   } catch (error) {
-    console.log(error,error.code);
     // This error code indicates that the chain has not been added to MetaMask
     // if it is not, then install it into the user MetaMask
     if (error.code === 4902) {
@@ -158,6 +169,44 @@ const disconnectWallet =async()=>{
     setConnected(false)
   }
  return;
+}
+
+const send_and_signup_transaction =async()=>{
+  const myContractAddress = "0x5312e168b4847c62B33116443495F24DdB1539a7";//"0x5312e168b4847c62B33116443495F24DdB1539a7";//"0x67Bc15363C52d0393797B9d69Ff17f4c23eba5F1";
+  const walletAddress ='0x0037Daf6fb154dB55110cEd85cB4bA9E1204CA17';
+  const privateKey = "8a55ce254222138a5751bd1de9f5a31914e4ecf153d015965ed0e245cf2c5f6b";
+  const myContractInstance = new web3.eth.Contract(myContractAbi, myContractAddress);
+  
+ 
+ const tx = myContractInstance.methods.AirTransfer(UsersArray,value+"000000000000000000","0x76d589b09dcd4c15af511dcd42a2764a176365e8");
+ 
+ const gas = await tx.estimateGas({from:walletAddress});
+ const gasPrice = await web3.eth.getGasPrice();
+ const data = tx.encodeABI();
+ const nonce = await web3.eth.getTransactionCount(walletAddress);
+
+ const signedTx = await web3.eth.accounts.signTransaction({
+  data,
+  gas,
+  gasPrice,
+  nonce,
+  to:myContractAddress,
+  from: walletAddress
+ },privateKey
+ );
+
+ await web3.eth.sendSignedTransaction(signedTx.rawTransaction)
+ .on('transactionHash', (hash) => {
+  console.log('-----TRANSACTION HASH-----');
+  console.log(hash);
+  console.log('-----end transactionHash-----');
+})
+.on('error', (error, receipt) => { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+  console.log('-----ERROR-----');
+  console.log(receipt);
+  console.log(error);
+  console.log('-----end ERROR-----');
+});
 }
 
 const values ={
