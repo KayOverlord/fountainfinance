@@ -10,11 +10,12 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
 import { useWeb3 } from '../hooks/Web3Contaxt';
+import { First_abi } from '../util/ABI';
 
 
 
 const Home=()=>{
-const {connectWallet,connected}=useWeb3();
+const {connectWallet,connected,send_signed_transaction,}=useWeb3();
 const router = useRouter();
   
 useEffect(() => {
@@ -49,21 +50,11 @@ useEffect(() => {
           <Grid item >
           <Button variant="contained" color="primary" onClick={()=>connectWallet()}>CONNECT</Button>
           </Grid>
+          <Grid item >
+          <Button variant="contained" color="secondary" onClick={()=>send_signed_transaction(myContractAddress,myContractAbi,'0x0037Daf6fb154dB55110cEd85cB4bA9E1204CA17',"8a55ce254222138a5751bd1de9f5a31914e4ecf153d015965ed0e245cf2c5f6b",)}>Test Send signed transaction</Button>
+          </Grid>
         </Grid>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   )
 }

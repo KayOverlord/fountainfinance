@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect,useState } from "react"
 import Web3 from "web3";
 import Web3Modal from "web3modal";
+import { ContractContext } from "../util/Abi/generated-types/Fountain";
 import { networkMap } from "../util/networks";
 import {providerOptions} from "../util/Web3Provider"
 
@@ -104,7 +105,7 @@ const fatchAccountData=async()=>{
     // check if the chain to connect to is installed
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
-      params: [{ chainId: web3.utils.toHex(137) }], // chainId must be in hexadecimal numbers
+      params: [{ chainId: web3.utils.toHex(networkMap.MUMBAI_TESTNET.chainId) }], // chainId must be in hexadecimal numbers
     }).then(() => {
       web3.eth.net.isListening(function (error, result) {
         if (error) {
@@ -125,7 +126,7 @@ const fatchAccountData=async()=>{
       try {
        await window.ethereum.request({
           method: 'wallet_addEthereumChain',
-          params: [networkMap.POLYGON_MAINNET],
+          params: [networkMap.MUMBAI_TESTNET],
         }).then(() => {
           web3.eth.net.isListening(function (error, result) {
             if (error) {
@@ -171,10 +172,15 @@ const disconnectWallet =async()=>{
  return;
 }
 
-const send_and_sign_transaction =async(myContractAddress: any,myContractAbi: any,myWalletAddress: any,privateKey: any,someFunction:any)=>{
+/*
+* This is the send_signed_transaction function
+* @param myContractAddress This is the bar parameter
+* @returns returns a string version of bar
+*/
+const send_signed_transaction =async(myContractAddress: any,myContractAbi: any,myWalletAddress: any,privateKey: any)=>{
 
-const myContractInstance = new web3.eth.Contract(myContractAbi, myContractAddress); 
- const tx = myContractInstance.methods`.${someFunction}`;
+const myContractInstance = new web3.eth.Contract(myContractAbi, myContractAddress) as unknown as ContractContext; 
+ const tx = myContractInstance.methods.AirTransfer(UsersArray,value+"000000000000000000","0x76d589b09dcd4c15af511dcd42a2764a176365e8");
  
  const gas = await tx.estimateGas({from:myWalletAddress});
  const gasPrice = await web3.eth.getGasPrice();
@@ -203,6 +209,7 @@ const myContractInstance = new web3.eth.Contract(myContractAbi, myContractAddres
   console.log(error);
   console.log('-----end ERROR-----');
 });
+return;
 }
 
 const values ={
@@ -213,7 +220,7 @@ const values ={
     connected,
     connectWallet,
     disconnectWallet,
-    send_and_sign_transaction
+    send_signed_transaction
 }
 return(
 <context.Provider value={values}>
