@@ -39,60 +39,70 @@ export const Web3Provider=({children})=>{
        }, []);
 
 
-       useEffect(() => {
-        if(window.ethereum) {
-          window.ethereum.on('disconnect', () => {
+       useEffect(()=>{
+
+        const handleAccountsChanged=(accounts)=>{
+          console.log("accountsChanged", accounts);
+          if(accounts.length >0){
+            setConnected(true)
+            setAddress(accounts)
+          }else{
             setConnected(false)
-            console.log("Websocket Provider connection disconnected!");
-          })
+          }
         }
-      },[])
+
+        const handleChainChanged=(chainId)=>{
+           // fatchAccountData()
+           console.log("chain ID", chainId);
+        }
+        const handleConnect=()=>{
+          //fatchAccountData()
+          setConnected(true)
+          console.log("Websocket Provider connection established!");
+
+        }
+
+        const handleDisconnect=()=>{
+          setConnected(false)
+            console.log("Websocket Provider connection disconnected!");
+        }
+
+        if(provider?.on){
+
+        
+          provider.on("accountsChanged",handleAccountsChanged);
+        
+          // Subscribe to chainId change
+          provider.on("chainChanged",handleChainChanged);
+        
+          // Subscribe to provider connection
+          provider.on('connect',handleConnect);
+        
+          // Subscribe to provider disconnection
+          provider.on("disconnect",handleDisconnect);
+        }
+        return () => {
+          if (provider?.removeListener) {
+            provider.removeListener('accountsChanged', handleAccountsChanged)
+            provider.removeListener('chainChanged', handleChainChanged)
+            provider.removeListener('connect', handleConnect)
+            provider.removeListener('disconnect', handleDisconnect)
+          }
+        }
+       },[provider])
+     
 
 const connectWallet=async()=>{
-  if(web3Modal){
-  web3Modal.clearCachedProvider();
-  }
+ 
   try {
   const provider = await web3Modal.connect();
    setProvider(provider)
    web3 = new Web3(provider);
-   fatchAccountData();
+   //fatchAccountData();
   } catch (error) {
     console.log("Could not get a wallet connection", error,provider);
     return;
   }
-
-if(provider){
-  provider.on("accountsChanged", (accounts) => {
-    if(accounts.length >0){
-      setConnected(true)
-      setAddress(accounts)
-    }else{
-      setConnected(false)
-    }
-  });
-
-  // Subscribe to chainId change
-  provider.on("chainChanged", (chainId) => {
-    fatchAccountData()
-    console.log("chain ID", chainId);
-  });
-
-  // Subscribe to provider connection
-  provider.on('connect', (info) => {
-    fatchAccountData()
-    setConnected(true)
-    console.log("Websocket Provider connection established!");
-  });
-
-  // Subscribe to provider disconnection
-  provider.on("disconnect", (info) => {
-    setConnected(false)
-    console.log("Websocket Provider connection disconnected!");
-  });
-}
-
-
     return;  
 }
 
@@ -100,10 +110,10 @@ if(provider){
 const fatchAccountData=async()=>{
   // Check if MetaMask is installed
  // MetaMask injects the global API into window.ethereum
- if (window.ethereum) {
+ if (provider) {
   try {
     // check if the chain to connect to is installed
-    await window.ethereum.request({
+    await provider.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: web3.utils.toHex(networkMap.MUMBAI_TESTNET.chainId) }], // chainId must be in hexadecimal numbers
     }).then(() => {
@@ -124,7 +134,7 @@ const fatchAccountData=async()=>{
     // if it is not, then install it into the user MetaMask
     if (error.code === 4902) {
       try {
-       await window.ethereum.request({
+       await provider.request({
           method: 'wallet_addEthereumChain',
           params: [networkMap.MUMBAI_TESTNET],
         }).then(() => {
@@ -155,20 +165,23 @@ const fatchAccountData=async()=>{
 }
 
 const disconnectWallet =async()=>{
-   // TODO: Which providers have close method?
-  if(provider!==undefined) {
+  console.log("provider",web3)
+  await web3Modal.clearCachedProvider();
 
-    // If the cached provider is not cleared,
-    // WalletConnect will default to the existing session
-    // and does not allow to re-scan the QR code with a new wallet.
-    // Depending on your use case you may want or want not his behavir.
-    await web3Modal.clearCachedProvider();
-    setProvider(null);
-    setConnected(false);
+  setConnected(false)
+  // if(provider!==undefined) {
     
-  }else{
-    setConnected(false)
-  }
+  //   // If the cached provider is not cleared,
+  //   // WalletConnect will default to the existing session
+  //   // and does not allow to re-scan the QR code with a new wallet.
+  //   // Depending on your use case you may want or want not his behavir.
+   
+  //   setProvider(null);
+  //   setConnected(false);
+    
+  // }else{
+    
+  // }
  return;
 }
 
