@@ -56,7 +56,7 @@ export const Web3Provider=({children})=>{
            console.log("chain ID", chainId);
         }
         const handleConnect=()=>{
-          //fatchAccountData()
+          fatchAccountData()
           setConnected(true)
           console.log("Websocket Provider connection established!");
 
@@ -165,23 +165,11 @@ const fatchAccountData=async()=>{
 }
 
 const disconnectWallet =async()=>{
-  console.log("provider",web3)
   await web3Modal.clearCachedProvider();
 
-  setConnected(false)
-  // if(provider!==undefined) {
-    
-  //   // If the cached provider is not cleared,
-  //   // WalletConnect will default to the existing session
-  //   // and does not allow to re-scan the QR code with a new wallet.
-  //   // Depending on your use case you may want or want not his behavir.
-   
-  //   setProvider(null);
-  //   setConnected(false);
-    
-  // }else{
-    
-  // }
+  setConnected(false);
+  setProvider(null);
+  
  return;
 }
 
@@ -193,7 +181,7 @@ const disconnectWallet =async()=>{
 const send_signed_transaction =async(myContractAddress: any,myContractAbi: any,myWalletAddress: any,privateKey: any)=>{
 
 const myContractInstance = new web3.eth.Contract(myContractAbi, myContractAddress) as unknown as ContractContext; 
- const tx = myContractInstance.methods.AirTransfer(UsersArray,value+"000000000000000000","0x76d589b09dcd4c15af511dcd42a2764a176365e8");
+ const tx = myContractInstance.methods;
  
  const gas = await tx.estimateGas({from:myWalletAddress});
  const gasPrice = await web3.eth.getGasPrice();
