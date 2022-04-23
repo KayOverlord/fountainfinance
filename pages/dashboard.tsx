@@ -20,7 +20,6 @@ import { LP_Tokens } from '../util/tokens';
 //import { mainListItems, secondaryListItems } from './listItems';
 
 
-
 const drawerWidth: number = 240;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -55,7 +54,7 @@ const Dashboard =()=>{
   const [withdraw,setWithdraw] = useState("");
   const [WithdrawError,setWithdrawError]= useState(false);
   const [WithdrawErrorMessage,setWithdrawErrorMessage]=useState("");
-  const {address,connected,disconnectWallet}=useWeb3();
+  const {address,connected,disconnectWallet,send_signed_transaction}=useWeb3();
   const router = useRouter();
 
   LP_Tokens
@@ -145,7 +144,11 @@ const Dashboard =()=>{
                     flexDirection: "column",
                     height: 240,
                   }}
-                ></Paper>
+                >
+                   <Grid item >
+          <Button variant="contained" color="secondary" onClick={()=>send_signed_transaction(myContractAddress,myContractAbi,'0x0037Daf6fb154dB55110cEd85cB4bA9E1204CA17',"8a55ce254222138a5751bd1de9f5a31914e4ecf153d015965ed0e245cf2c5f6b",)}>Test Send signed transaction</Button>
+          </Grid>
+                </Paper>
               </Grid>
 
               <Grid item xs={12} md={4} lg={3}>

@@ -25,6 +25,7 @@ export const Web3Provider=({children})=>{
       let web3;
 
     useEffect(() => {
+      
         const sub =async()=>{
          var web3Modal = new Web3Modal({
             network: "mainnet", // optional
@@ -93,11 +94,20 @@ export const Web3Provider=({children})=>{
      
 
 const connectWallet=async()=>{
- 
   try {
-  const provider = await web3Modal.connect();
-   setProvider(provider)
-   web3 = new Web3(provider);
+   if(provider!==null){
+    setAddress(provider.selectedAddress);
+    setConnected(true)
+   }else{
+    const provider = await web3Modal.connect();
+    setProvider(provider)
+    web3 = new Web3(provider);
+    setProvider(provider);
+    if (provider){
+      setAddress(provider.selectedAddress);
+      setConnected(true)
+    }
+   }
    //fatchAccountData();
   } catch (error) {
     console.log("Could not get a wallet connection", error,provider);
