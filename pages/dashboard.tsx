@@ -146,7 +146,18 @@ const Dashboard =()=>{
                   }}
                 >
                    <Grid item >
-          <Button variant="contained" color="secondary" onClick={()=>send_signed_transaction(myContractAddress,myContractAbi,'0x0037Daf6fb154dB55110cEd85cB4bA9E1204CA17',"8a55ce254222138a5751bd1de9f5a31914e4ecf153d015965ed0e245cf2c5f6b",)}>Test Send signed transaction</Button>
+         <Typography
+         variant="h4"
+         color="inherit"
+         >Goli Supply: 100 000 000
+         </Typography>
+          </Grid>
+          <Grid item >
+         <Typography
+         variant="h4"
+         color="inherit"
+         >Total value locked: 100 000 000
+         </Typography>
           </Grid>
                 </Paper>
               </Grid>
