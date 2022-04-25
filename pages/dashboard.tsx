@@ -17,7 +17,7 @@ import { useWeb3 } from '../hooks/Web3Contaxt';
 import { useRouter } from 'next/router';
 import Cards from '../components/Cards';
 import { LP_Tokens } from '../util/tokens';
-//import { mainListItems, secondaryListItems } from './listItems';
+import Fountain from '../util/Abi/Fountain.json'
 
 
 const drawerWidth: number = 240;
@@ -54,7 +54,7 @@ const Dashboard =()=>{
   const [withdraw,setWithdraw] = useState("");
   const [WithdrawError,setWithdrawError]= useState(false);
   const [WithdrawErrorMessage,setWithdrawErrorMessage]=useState("");
-  const {address,connected,disconnectWallet,send_signed_transaction}=useWeb3();
+  const {address,connected,disconnectWallet,get_contract_data,send_signed_transaction}=useWeb3();
   const router = useRouter();
 
   LP_Tokens
@@ -159,6 +159,12 @@ const Dashboard =()=>{
          >Total value locked: 100 000 000
          </Typography>
           </Grid>
+          <Button 
+          onClick={() => get_contract_data(Fountain,"0x252F5FB243B656ceFffEBcF7926796a2048E02f9")} 
+          variant="contained" 
+          style={{ marginTop: 15,marginBottom: 15,width:"100%" }}>
+              test button
+            </Button>
                 </Paper>
               </Grid>
 

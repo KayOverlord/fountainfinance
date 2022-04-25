@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect,useState } from "react"
 import Web3 from "web3";
 import Web3Modal from "web3modal";
-import { ContractContext } from "../util/Abi/generated-types/Fountain";
+import { ContractContext,FountainMethodNames,Fountain } from "../util/Abi/generated-types/Fountain";
 import { networkMap } from "../util/networks";
 import {providerOptions} from "../util/Web3Provider"
 
@@ -18,11 +18,10 @@ export const Web3Provider=({children})=>{
   const [connected,setConnected]=useState(false);
   const [provider,setProvider]=useState(null);
   const [web3Modal,setWeb3Modal]=useState(null);
-  
-  
+  const [web3,setWeb3]=useState(null);
     
       // Chosen wallet provider given by the dialog window
-      let web3;
+   
 
     useEffect(() => {
       
@@ -99,12 +98,12 @@ const connectWallet=async()=>{
     setAddress(provider.selectedAddress);
     setConnected(true)
    }else{
-    const provider = await web3Modal.connect();
-    setProvider(provider)
-    web3 = new Web3(provider);
-    setProvider(provider);
-    if (provider){
-      setAddress(provider.selectedAddress);
+    const prov = await web3Modal.connect();
+    const w3 = new Web3(prov);
+    setProvider(prov)
+    setWeb3(w3)
+    if (prov){
+      setAddress(prov.selectedAddress);
       setConnected(true)
     }
    }
@@ -118,6 +117,7 @@ const connectWallet=async()=>{
 
 
 const fatchAccountData=async()=>{
+  
   // Check if MetaMask is installed
  // MetaMask injects the global API into window.ethereum
  if (provider) {
@@ -188,39 +188,21 @@ const disconnectWallet =async()=>{
 * @param myContractAddress This is the bar parameter
 * @returns returns a string version of bar
 */
-const send_signed_transaction =async(myContractAddress: any,myContractAbi: any,myWalletAddress: any,privateKey: any)=>{
+const send_signed_transaction =async(Abi,ContractAddress)=>{
+//
+// var myContract = new web3.eth.Contract(Abi,ContractAddress);
+// myContract.methods.myMethod(123).send({from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'})
+}
 
-const myContractInstance = new web3.eth.Contract(myContractAbi, myContractAddress) as unknown as ContractContext; 
- const tx = myContractInstance.methods;
- 
- const gas = await tx.estimateGas({from:myWalletAddress});
- const gasPrice = await web3.eth.getGasPrice();
- const data = tx.encodeABI();
- const nonce = await web3.eth.getTransactionCount(myWalletAddress);
+const get_contract_data =(Abi,ContractAddress)=>{
+  console.log("web3",web3)
+  var MyContract = new web3.eth.Contract(Abi,ContractAddress);
+  MyContract['methods']['name']().call(callback);
+}
 
- const signedTx = await web3.eth.accounts.signTransaction({
-  data,
-  gas,
-  gasPrice,
-  nonce,
-  to:myContractAddress,
-  from: myWalletAddress
- },privateKey
- );
-
- return await web3.eth.sendSignedTransaction(signedTx.rawTransaction)
- .on('transactionHash', (hash) => {
-  console.log('-----TRANSACTION HASH-----');
-  console.log(hash);
-  console.log('-----end transactionHash-----');
-})
-.on('error', (error, receipt) => { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-  console.log('-----ERROR-----');
-  console.log(receipt);
-  console.log(error);
-  console.log('-----end ERROR-----');
-});
-return;
+const callback=(error, result)=>{
+console.log("results:",result);
+console.log("error",error)
 }
 
 const values ={
@@ -231,7 +213,8 @@ const values ={
     connected,
     connectWallet,
     disconnectWallet,
-    send_signed_transaction
+    send_signed_transaction,
+    get_contract_data
 }
 return(
 <context.Provider value={values}>
@@ -240,3 +223,39 @@ return(
 )
 
 }
+
+/*
+FOUNTAIN USDC(0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174)
+0x5918E233B519d67489303AF5DA1F0eB0A9fe5bD0
+FTN-USDC
+Fountain USD Coin (PoS)
+
+FOUNTAIN COMBO(0x6DdB31002abC64e1479Fc439692F7eA061e78165)
+0x0ab865137ddb23e99447369A0340C7eB92Ad1C0F
+FTN-COMBO
+Fountain Furucombo (PoS)
+
+FOUNTAIN GOLI(0x76D589B09dcD4C15Af511DcD42a2764a176365e8)
+0x2E39D2AE5b500641D819fF15d2F0141987eDBfDf
+ FTN-GOLI
+Fountain Goli
+
+FOUNTAIN MATIC(0x0000000000000000000000000000000000001010)
+0x252F5FB243B656ceFffEBcF7926796a2048E02f9
+ FTN-MATIC
+Fountain Matic Token
+
+
+   .on('transactionHash', function(hash){
+        console.log("HASH",hash)
+    })
+    .on('receipt', function(receipt){
+      console.log("Receipt",receipt)
+    })
+    .on('confirmation', function(confirmationNumber, receipt){
+      console.log("confirmationNumber",confirmationNumber)
+    })
+    .on('error', function(error, receipt) {
+      console.log("CALL ERROR",error)
+    });
+*/

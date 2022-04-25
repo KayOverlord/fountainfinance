@@ -24,7 +24,7 @@ function Cards(props) {
               error={props.depositError}
               helperText={props.depositErrorMessage}
             />
-            <Button type="submit" variant="contained" style={{ marginTop: 18,marginBottom: 15,width:"100%" }}>
+            <Button variant="contained" style={{ marginTop: 18,marginBottom: 15,width:"100%" }}>
               Deposit your MATIC
             </Button>
             <TextField
