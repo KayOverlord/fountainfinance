@@ -27,3 +27,9 @@ export const LP_Tokens =[{
     image:"https://polygonscan.com/token/images/golinenetwork_32.png"
 }
 ]
+
+export const contracts_address={
+Archangel:"0xf40388b593efb236d1AB314A6aa969F9487890d8",
+AngelFactory:"0x66Ab9f76e7822B7160E22f8b02Dbd2D757FabF32",
+Angel:"0x9A4463e514487C597f045Cea84BB4b7D053a3D73",
+}

@@ -16,7 +16,7 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { useWeb3 } from '../hooks/Web3Contaxt';
 import { useRouter } from 'next/router';
 import Cards from '../components/Cards';
-import { LP_Tokens } from '../util/tokens';
+import { LP_Tokens } from '../util/tokens&address';
 import Fountain from '../util/Abi/Fountain.json'
 
 
@@ -158,7 +158,7 @@ const Dashboard =()=>{
          </Typography>
           </Grid>
           <Button 
-          onClick={() => get_contract_data(Fountain,"0x252F5FB243B656ceFffEBcF7926796a2048E02f9")} 
+          onClick={() => get_contract_data(Fountain,LP_Tokens[0].Fountain_address,"name")} 
           variant="contained" 
           style={{ marginTop: 15,marginBottom: 15,width:"100%" }}>
               test button

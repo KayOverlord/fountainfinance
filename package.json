@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "web3-abi": "abi-types-generator './util/Abi/Fountain.json' --output='./util/Abi/generated-types' --name=Fountain"
+    "web3-abi": "abi-types-generator './util/Abi/Angel.json' --output='./util/Abi/generated-types' --name=Angel"
   },
   "dependencies": {
     "@burner-wallet/burner-connect-provider": "^0.1.1",

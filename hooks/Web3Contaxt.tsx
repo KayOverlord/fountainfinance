@@ -194,15 +194,15 @@ const send_signed_transaction =async(Abi,ContractAddress)=>{
 // myContract.methods.myMethod(123).send({from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'})
 }
 
-const get_contract_data =(Abi,ContractAddress)=>{
+const get_contract_data =(Abi,ContractAddress,methodName)=>{
   console.log("web3",web3)
   var MyContract = new web3.eth.Contract(Abi,ContractAddress);
-  MyContract['methods']['name']().call(callback);
+  MyContract['methods'][methodName]().call(callback);
 }
 
 const callback=(error, result)=>{
-console.log("results:",result);
-console.log("error",error)
+console.log("error",error);
+return result
 }
 
 const values ={
