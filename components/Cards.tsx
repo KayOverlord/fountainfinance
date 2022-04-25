@@ -1,6 +1,7 @@
 import { Accordion, AccordionSummary, Typography, AccordionDetails, TextField, Button } from '@mui/material'
 import styles from '../styles/Home.module.css';
-import React from 'react'
+import React from 'react';
+import Image from 'next/image'
 
 function Cards(props) {
     return (
@@ -9,8 +10,14 @@ function Cards(props) {
         <AccordionSummary
           aria-controls="panel1a-content"
           id="panel1a-header"
-        >
+        >  <Image
+        src={props.img}
+        alt="Picture of the token"
+        width={30}
+        height={25}
+      />
           <Typography>{props.title}</Typography>
+        
         </AccordionSummary>
         <AccordionDetails>
       

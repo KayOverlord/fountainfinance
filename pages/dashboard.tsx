@@ -184,6 +184,7 @@ const Dashboard =()=>{
                 <Paper sx={{ p:3, display: "flex", flexDirection: "column",width:"100%" }}>              
                  <Cards
                  title={val.title}
+                 img={val.image}
                  deposit={deposit} 
                  handleChange={handleChange} 
                  depositError={depositError}
