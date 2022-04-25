@@ -37,7 +37,7 @@ useEffect(() => {
 
       <main className={styles.main}>
         <Typography  className={styles.title}>
-          Welcome to Fountain Farming
+          Welcome to the Fountain Farm
         </Typography>
 
         <Typography color="primary" className={styles.description}>

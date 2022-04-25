@@ -174,7 +174,9 @@ const Dashboard =()=>{
                     flexDirection: "column",
                     height: 240,
                   }}
-                ></Paper>
+                >
+                  
+                </Paper>
               </Grid>
 
               { LP_Tokens&&LP_Tokens.map((val,index)=>{
@@ -192,8 +194,7 @@ const Dashboard =()=>{
                  withdraw={withdraw}
                  WithdrawHandleChange={WithdrawHandleChange}
                  WithdrawError={WithdrawError}
-                 WithdrawErrorMessage={WithdrawErrorMessage}
-                 />
+                 WithdrawErrorMessage={WithdrawErrorMessage}/>
                 </Paper>
                 
               </Grid>
