@@ -194,15 +194,21 @@ const send_signed_transaction =async(Abi,ContractAddress)=>{
 // myContract.methods.myMethod(123).send({from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'})
 }
 
-const get_contract_data =(Abi,ContractAddress,methodName)=>{
-  console.log("web3",web3)
+const get_contract_data =async(Abi,ContractAddress,methodName)=>{
   var MyContract = new web3.eth.Contract(Abi,ContractAddress);
-  MyContract['methods'][methodName]().call(callback);
+  return await MyContract['methods'][methodName]().call(callback);
+}
+const get_balance=async(Abi,token_contract,contract)=>{
+  var MyContract = new web3.eth.Contract(Abi,token_contract);
+  return await MyContract.methods.balanceOf(contract).call(callback);
+  
 }
 
 const callback=(error, result)=>{
-console.log("error",error);
+  if(result){
 return result
+  }
+  return "0";
 }
 
 const values ={
@@ -214,7 +220,8 @@ const values ={
     connectWallet,
     disconnectWallet,
     send_signed_transaction,
-    get_contract_data
+    get_contract_data,
+    get_balance
 }
 return(
 <context.Provider value={values}>
