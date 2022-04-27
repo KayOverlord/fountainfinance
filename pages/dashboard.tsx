@@ -16,9 +16,10 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { useWeb3 } from '../hooks/Web3Contaxt';
 import { useRouter } from 'next/router';
 import Cards from '../components/Cards';
-import { LP_Tokens } from '../util/tokens&address';
+import { LP_Tokens,contracts_address } from '../util/tokens&address';
 import Fountain from '../util/Abi/Fountain.json'
-
+import Angel from '../util/Abi/Angel.json';
+import Web3 from "web3";
 
 const drawerWidth: number = 240;
 
@@ -54,16 +55,38 @@ const Dashboard =()=>{
   const [withdraw,setWithdraw] = useState("");
   const [WithdrawError,setWithdrawError]= useState(false);
   const [WithdrawErrorMessage,setWithdrawErrorMessage]=useState("");
-  const {address,connected,disconnectWallet,get_contract_data,send_signed_transaction}=useWeb3();
+  const {address,connected,disconnectWallet,get_contract_data, get_balance}=useWeb3();
   const router = useRouter();
 
-  LP_Tokens
+  const [gracePerSecond,setGracePerSecond] =useState("0");
+  const [balance,setBalance] = useState("");
+  const [endTime,setEndTime] = useState("");
+
   useEffect(() => {
     if(connected==false){
       router.push("/");
-     
     }
-  }, [!connected])
+  }, [!connected]);
+
+  useEffect(() => {
+    get_contract_data(Angel,contracts_address.Angel,"gracePerSecond")
+    .then(data=>{
+      setGracePerSecond(Web3.utils.fromWei(data))
+    }
+      );
+      
+      get_balance(Fountain,LP_Tokens[3].address,contracts_address.Angel).then(data=>{
+        setBalance(Web3.utils.fromWei(data))
+      });
+
+      get_contract_data(Angel,contracts_address.Angel,"endTime")
+    .then(data=>{
+      let date = new Date(data* 1000).toLocaleString();
+      setEndTime(date)
+    }
+      );
+  }, [])
+  
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -140,29 +163,34 @@ const Dashboard =()=>{
                     p: 2,
                     display: "flex",
                     flexDirection: "column",
-                    height: 240,
+                    minHeight: 240,
                   }}
                 >
                    <Grid item >
          <Typography
          variant="h4"
          color="inherit"
-         >Goli Supply: 100 000 000
+         
+         style={{overflowWrap: 'break-word'}}
+         >Goli Supply <Typography variant="h5" color="primary">{balance}</Typography>
          </Typography>
           </Grid>
           <Grid item >
          <Typography
          variant="h4"
          color="inherit"
-         >Total value locked: 100 000 000
+         style={{overflowWrap: 'break-word'}}
+         >Distribution per second <Typography variant="h5" color="primary">{gracePerSecond}</Typography>
          </Typography>
           </Grid>
-          <Button 
-          onClick={() => get_contract_data(Fountain,LP_Tokens[0].Fountain_address,"name")} 
-          variant="contained" 
-          style={{ marginTop: 15,marginBottom: 15,width:"100%" }}>
-              test button
-            </Button>
+          <Grid item >
+         <Typography
+         variant="h4"
+         color="inherit"
+         style={{overflowWrap: 'break-word'}}
+         >End of distribution <Typography variant="h5" color="primary">{endTime}</Typography>
+         </Typography>
+          </Grid>
                 </Paper>
               </Grid>
 

@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect,useState } from "react"
 import Web3 from "web3";
 import Web3Modal from "web3modal";
-import { ContractContext,FountainMethodNames,Fountain } from "../util/Abi/generated-types/Fountain";
 import { networkMap } from "../util/networks";
 import {providerOptions} from "../util/Web3Provider"
 
@@ -188,17 +187,17 @@ const disconnectWallet =async()=>{
 * @param myContractAddress This is the bar parameter
 * @returns returns a string version of bar
 */
-const send_signed_transaction =async(Abi,ContractAddress)=>{
+const send_signed_transaction =async(Abi:[],ContractAddress:string)=>{
 //
 // var myContract = new web3.eth.Contract(Abi,ContractAddress);
 // myContract.methods.myMethod(123).send({from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'})
 }
 
-const get_contract_data =async(Abi,ContractAddress,methodName)=>{
+const get_contract_data =async(Abi:[],ContractAddress:string,methodName:string)=>{
   var MyContract = new web3.eth.Contract(Abi,ContractAddress);
   return await MyContract['methods'][methodName]().call(callback);
 }
-const get_balance=async(Abi,token_contract,contract)=>{
+const get_balance=async(Abi:[],token_contract:string,contract:string)=>{
   var MyContract = new web3.eth.Contract(Abi,token_contract);
   return await MyContract.methods.balanceOf(contract).call(callback);
   
