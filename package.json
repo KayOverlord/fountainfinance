@@ -29,6 +29,7 @@
     "next": "12.0.10",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-svg-piechart": "^2.4.2",
     "styled-components": "^5.3.3",
     "walletlink": "^2.4.6",
     "web3": "^1.7.0",

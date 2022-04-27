@@ -193,9 +193,13 @@ const send_signed_transaction =async(Abi:[],ContractAddress:string)=>{
 // myContract.methods.myMethod(123).send({from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'})
 }
 
-const get_contract_data =async(Abi:[],ContractAddress:string,methodName:string)=>{
+const get_contract_data =async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
   var MyContract = new web3.eth.Contract(Abi,ContractAddress);
+  if(params.length < 0){
   return await MyContract['methods'][methodName]().call(callback);
+  }else{
+    params.forEach()
+  }
 }
 const get_balance=async(Abi:[],token_contract:string,contract:string)=>{
   var MyContract = new web3.eth.Contract(Abi,token_contract);

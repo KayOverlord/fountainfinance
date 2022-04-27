@@ -20,7 +20,7 @@ import { LP_Tokens,contracts_address } from '../util/tokens&address';
 import Fountain from '../util/Abi/Fountain.json'
 import Angel from '../util/Abi/Angel.json';
 import Web3 from "web3";
-
+import ReactSvgPieChart from "react-svg-piechart"
 const drawerWidth: number = 240;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -62,6 +62,12 @@ const Dashboard =()=>{
   const [balance,setBalance] = useState("");
   const [endTime,setEndTime] = useState("");
 
+  const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const removeNonNumeric = num => num.toString().replace(/[^0-9]/g, "");
+  const data = [
+    {title: "Data 1", value: 50, color: "#22594e"},
+    {title: "Data 2", value: 50, color: "#2f7d6d"}
+  ]
   useEffect(() => {
     if(connected==false){
       router.push("/");
@@ -76,7 +82,7 @@ const Dashboard =()=>{
       );
       
       get_balance(Fountain,LP_Tokens[3].address,contracts_address.Angel).then(data=>{
-        setBalance(Web3.utils.fromWei(data))
+        setBalance(addCommas(removeNonNumeric(Web3.utils.fromWei(data))))
       });
 
       get_contract_data(Angel,contracts_address.Angel,"endTime")
@@ -85,6 +91,9 @@ const Dashboard =()=>{
       setEndTime(date)
     }
       );
+     
+        
+     
   }, [])
   
 
@@ -100,9 +109,7 @@ const Dashboard =()=>{
   const WithdrawHandleChange =(e)=>{
     e.preventDefault()
     setWithdraw(e.target.value);
-  }
-
-  
+  } 
 
   return (
     <ThemeProvider theme={theme}>
@@ -136,12 +143,23 @@ const Dashboard =()=>{
             >
               Happy Fountain Farming
             </Typography>
-              <Button variant="contained" style={{width: "9rem"}} color="primary" endIcon={<PowerSettingsNewIcon/>}
-              onClick={() => disconnectWallet()}>
-                <div >
-                <Typography textOverflow="ellipsis" noWrap style={{width: "6rem"}} >{address} </Typography>
-                </div>
-              </Button>
+            <Button
+              variant="contained"
+              style={{ width: "9rem" }}
+              color="primary"
+              endIcon={<PowerSettingsNewIcon />}
+              onClick={() => disconnectWallet()}
+            >
+              <div>
+                <Typography
+                  textOverflow="ellipsis"
+                  noWrap
+                  style={{ width: "6rem" }}
+                >
+                  {address}{" "}
+                </Typography>
+              </div>
+            </Button>
           </Toolbar>
         </AppBar>
         <Box
@@ -166,31 +184,91 @@ const Dashboard =()=>{
                     minHeight: 240,
                   }}
                 >
-                   <Grid item >
-         <Typography
-         variant="h4"
-         color="inherit"
-         
-         style={{overflowWrap: 'break-word'}}
-         >Goli Supply <Typography variant="h5" color="primary">{balance}</Typography>
-         </Typography>
-          </Grid>
-          <Grid item >
-         <Typography
-         variant="h4"
-         color="inherit"
-         style={{overflowWrap: 'break-word'}}
-         >Distribution per second <Typography variant="h5" color="primary">{gracePerSecond}</Typography>
-         </Typography>
-          </Grid>
-          <Grid item >
-         <Typography
-         variant="h4"
-         color="inherit"
-         style={{overflowWrap: 'break-word'}}
-         >End of distribution <Typography variant="h5" color="primary">{endTime}</Typography>
-         </Typography>
-          </Grid>
+                  <Grid container xs={12}>
+                  <Grid item xs={12} md={8} >
+                  <Grid item>
+                    <Typography
+                      variant="h4"
+                      color="inherit"
+                      style={{ overflowWrap: "break-word" }}
+                    >
+                      Goli supply{" "}
+                      <Typography
+                        variant="h5"
+                        color="primary"
+                        style={{
+                          textShadow:
+                            "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
+                        }}
+                      >
+                        {balance}
+                      </Typography>
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography
+                      variant="h4"
+                      color="inherit"
+                      style={{ overflowWrap: "break-word" }}
+                    >
+                      Distribution per second{" "}
+                      <Typography
+                        variant="h5"
+                        color="primary"
+                        style={{
+                          textShadow:
+                            "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
+                        }}
+                      >
+                        {gracePerSecond}
+                      </Typography>
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography
+                      variant="h4"
+                      color="inherit"
+                      style={{ overflowWrap: "break-word" }}
+                    >
+                      End of distribution{" "}
+                      <Typography
+                        variant="h5"
+                        color="primary"
+                        style={{
+                          textShadow:
+                            "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
+                        }}
+                      >
+                        {endTime}
+                      </Typography>
+                    </Typography>
+                  </Grid>
+                  </Grid>
+                  <Grid item xs={12} md={4} >
+                    <ReactSvgPieChart
+                      strokeWidth={0}
+                      data={data}
+                      startAngle={90}
+                      // If you need expand on hover (or touch) effect
+                      expandOnHover
+                      // If you need custom behavior when sector is hovered (or touched)
+                      onSectorHover={(d, i, e) => {
+                        if (d) {
+                          console.log(
+                            "Mouse enter - Index:",
+                            i,
+                            "Data:",
+                            d,
+                            "Event:",
+                            e
+                          );
+                        } else {
+                          console.log("Mouse leave - Index:", i, "Event:", e);
+                        }
+                      }}
+                    />
+                  </Grid>
+                  </Grid>
                 </Paper>
               </Grid>
 
@@ -202,36 +280,38 @@ const Dashboard =()=>{
                     flexDirection: "column",
                     height: 240,
                   }}
-                >
-                  
-                </Paper>
+                ></Paper>
               </Grid>
 
-              { LP_Tokens&&LP_Tokens.map((val,index)=>{
-                  return(
-              <Grid item xs={12} md={4} lg={4} key={index} >
-             
-                <Paper sx={{ p:3, display: "flex", flexDirection: "column",width:"100%" }}>              
-                 <Cards
-                 title={val.title}
-                 img={val.image}
-                 deposit={deposit} 
-                 handleChange={handleChange} 
-                 depositError={depositError}
-                 depositErrorMessage={depositErrorMessage}
-                 withdraw={withdraw}
-                 WithdrawHandleChange={WithdrawHandleChange}
-                 WithdrawError={WithdrawError}
-                 WithdrawErrorMessage={WithdrawErrorMessage}/>
-                </Paper>
-                
-              </Grid>
-              )
-
-            })
-            }
+              {LP_Tokens &&
+                LP_Tokens.map((val, index) => {
+                  return (
+                    <Grid item xs={12} md={4} lg={4} key={index}>
+                      <Paper
+                        sx={{
+                          p: 3,
+                          display: "flex",
+                          flexDirection: "column",
+                          width: "100%",
+                        }}
+                      >
+                        <Cards
+                          title={val.title}
+                          img={val.image}
+                          deposit={deposit}
+                          handleChange={handleChange}
+                          depositError={depositError}
+                          depositErrorMessage={depositErrorMessage}
+                          withdraw={withdraw}
+                          WithdrawHandleChange={WithdrawHandleChange}
+                          WithdrawError={WithdrawError}
+                          WithdrawErrorMessage={WithdrawErrorMessage}
+                        />
+                      </Paper>
+                    </Grid>
+                  );
+                })}
             </Grid>
-          
           </Container>
         </Box>
       </Box>
