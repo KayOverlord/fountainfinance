@@ -19,17 +19,18 @@ export const LP_Tokens =[{
     symbol:"FTN-MATIC",
     image:"https://polygonscan.com/token/images/matic_32.png"
 },
-{
-    title:"GOLI",
-    address:"0x76D589B09dcD4C15Af511DcD42a2764a176365e8",
-    Fountain_address:"0x2E39D2AE5b500641D819fF15d2F0141987eDBfDf",
-    symbol:"FTN-GOLI",
-    image:"https://polygonscan.com/token/images/golinenetwork_32.png"
-}
+// {
+//     title:"GOLI",
+//     address:"0x76D589B09dcD4C15Af511DcD42a2764a176365e8",
+//     Fountain_address:"0x2E39D2AE5b500641D819fF15d2F0141987eDBfDf",
+//     symbol:"FTN-GOLI",
+//     image:"https://polygonscan.com/token/images/golinenetwork_32.png"
+// }
 ]
 
 export const contracts_address={
 Archangel:"0xf40388b593efb236d1AB314A6aa969F9487890d8",
 AngelFactory:"0x66Ab9f76e7822B7160E22f8b02Dbd2D757FabF32",
 Angel:"0x9A4463e514487C597f045Cea84BB4b7D053a3D73",
+RewardToken:"0x76D589B09dcD4C15Af511DcD42a2764a176365e8"
 }

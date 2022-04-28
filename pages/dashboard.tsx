@@ -61,12 +61,13 @@ const Dashboard =()=>{
   const [gracePerSecond,setGracePerSecond] =useState("0");
   const [balance,setBalance] = useState("");
   const [endTime,setEndTime] = useState("");
+  const [userInfo,setUserInfo] = useState({amount:"",rewards:""});
 
   const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeNonNumeric = num => num.toString().replace(/[^0-9]/g, "");
   const data = [
-    {title: "Data 1", value: 50, color: "#22594e"},
-    {title: "Data 2", value: 50, color: "#2f7d6d"}
+    {title: "Amount", value:userInfo.amount, color:theme.palette.primary.main},
+    {title: "Rewards", value:userInfo.rewards, color:theme.palette.secondary.main}
   ]
   useEffect(() => {
     if(connected==false){
@@ -81,7 +82,15 @@ const Dashboard =()=>{
     }
       );
       
-      get_balance(Fountain,LP_Tokens[3].address,contracts_address.Angel).then(data=>{
+      get_contract_data(Angel,contracts_address.Angel,"userInfo",["0","0x0037Daf6fb154dB55110cEd85cB4bA9E1204CA17"])
+    .then(data=>{
+      let amount = data.amount;
+      let rewards = data.rewardDebt;
+      setUserInfo({amount,rewards})
+    }
+      );
+
+      get_balance(Fountain,contracts_address.RewardToken,contracts_address.Angel).then(data=>{
         setBalance(addCommas(removeNonNumeric(Web3.utils.fromWei(data))))
       });
 
@@ -184,7 +193,7 @@ const Dashboard =()=>{
                     minHeight: 240,
                   }}
                 >
-                  <Grid container xs={12}>
+                  <Grid container>
                   <Grid item xs={12} md={8} >
                   <Grid item>
                     <Typography
@@ -193,7 +202,8 @@ const Dashboard =()=>{
                       style={{ overflowWrap: "break-word" }}
                     >
                       Goli supply{" "}
-                      <Typography
+                    </Typography>
+                    <Typography
                         variant="h5"
                         color="primary"
                         style={{
@@ -203,7 +213,6 @@ const Dashboard =()=>{
                       >
                         {balance}
                       </Typography>
-                    </Typography>
                   </Grid>
                   <Grid item>
                     <Typography
@@ -212,7 +221,8 @@ const Dashboard =()=>{
                       style={{ overflowWrap: "break-word" }}
                     >
                       Distribution per second{" "}
-                      <Typography
+                    </Typography>
+                    <Typography
                         variant="h5"
                         color="primary"
                         style={{
@@ -222,7 +232,6 @@ const Dashboard =()=>{
                       >
                         {gracePerSecond}
                       </Typography>
-                    </Typography>
                   </Grid>
                   <Grid item>
                     <Typography
@@ -231,7 +240,8 @@ const Dashboard =()=>{
                       style={{ overflowWrap: "break-word" }}
                     >
                       End of distribution{" "}
-                      <Typography
+                    </Typography>
+                    <Typography
                         variant="h5"
                         color="primary"
                         style={{
@@ -241,7 +251,6 @@ const Dashboard =()=>{
                       >
                         {endTime}
                       </Typography>
-                    </Typography>
                   </Grid>
                   </Grid>
                   <Grid item xs={12} md={4} >
@@ -254,16 +263,7 @@ const Dashboard =()=>{
                       // If you need custom behavior when sector is hovered (or touched)
                       onSectorHover={(d, i, e) => {
                         if (d) {
-                          console.log(
-                            "Mouse enter - Index:",
-                            i,
-                            "Data:",
-                            d,
-                            "Event:",
-                            e
-                          );
-                        } else {
-                          console.log("Mouse leave - Index:", i, "Event:", e);
+                          console.log("Data:",d.title);
                         }
                       }}
                     />

@@ -195,12 +195,13 @@ const send_signed_transaction =async(Abi:[],ContractAddress:string)=>{
 
 const get_contract_data =async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
   var MyContract = new web3.eth.Contract(Abi,ContractAddress);
-  if(params.length < 0){
-  return await MyContract['methods'][methodName]().call(callback);
+  if(params?.length){ 
+    return await MyContract['methods'][methodName](...params).call(callback);
   }else{
-    params.forEach()
+    return await MyContract['methods'][methodName]().call(callback);
   }
 }
+
 const get_balance=async(Abi:[],token_contract:string,contract:string)=>{
   var MyContract = new web3.eth.Contract(Abi,token_contract);
   return await MyContract.methods.balanceOf(contract).call(callback);
@@ -213,6 +214,7 @@ return result
   }
   return "0";
 }
+
 
 const values ={
     web3Modal,
