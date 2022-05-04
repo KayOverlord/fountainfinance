@@ -53,6 +53,9 @@ export const Web3Provider=({children})=>{
         const handleChainChanged=(chainId)=>{
            // fatchAccountData()
            console.log("chain ID", chainId);
+           if(chainId!==web3.utils.toHex(networkMap.MUMBAI_TESTNET.chainId)){
+            handleDisconnect();
+           }
         }
         const handleConnect=()=>{
           fatchAccountData()
@@ -188,12 +191,11 @@ const disconnectWallet =async()=>{
 * @returns returns a string version of bar
 */
 const send_signed_transaction =async(Abi:[],ContractAddress:string)=>{
-//
-// var myContract = new web3.eth.Contract(Abi,ContractAddress);
+//var myContract = new web3.eth.Contract(Abi,ContractAddress);
 // myContract.methods.myMethod(123).send({from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'})
 }
 
-const get_contract_data =async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
+const get_contract_data=async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
   var MyContract = new web3.eth.Contract(Abi,ContractAddress);
   if(params?.length){ 
     return await MyContract['methods'][methodName](...params).call(callback);

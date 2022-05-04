@@ -49,12 +49,6 @@ const AppBar = styled(MuiAppBar, {
 
 const Dashboard =()=>{
   const [open, setOpen] = useState(true);
-  const [depositError, setError] = useState(false);
-  const [depositErrorMessage, setErrorMessage] = useState("");
-  const [deposit,setDeposit] = useState("");
-  const [withdraw,setWithdraw] = useState("");
-  const [WithdrawError,setWithdrawError]= useState(false);
-  const [WithdrawErrorMessage,setWithdrawErrorMessage]=useState("");
   const {address,connected,disconnectWallet,get_contract_data, get_balance}=useWeb3();
   const router = useRouter();
 
@@ -110,15 +104,9 @@ const Dashboard =()=>{
     setOpen(!open);
   };
 
-  const handleChange = (e) => {
-    e.preventDefault()
-    setDeposit(e.target.value);
-  }
 
-  const WithdrawHandleChange =(e)=>{
-    e.preventDefault()
-    setWithdraw(e.target.value);
-  } 
+
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -298,14 +286,8 @@ const Dashboard =()=>{
                         <Cards
                           title={val.title}
                           img={val.image}
-                          deposit={deposit}
-                          handleChange={handleChange}
-                          depositError={depositError}
-                          depositErrorMessage={depositErrorMessage}
-                          withdraw={withdraw}
-                          WithdrawHandleChange={WithdrawHandleChange}
-                          WithdrawError={WithdrawError}
-                          WithdrawErrorMessage={WithdrawErrorMessage}
+                          address={val.address}
+                          fountain={val.Fountain_address}
                         />
                       </Paper>
                     </Grid>
