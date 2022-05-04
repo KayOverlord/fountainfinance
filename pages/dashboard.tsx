@@ -288,6 +288,7 @@ const Dashboard =()=>{
                           img={val.image}
                           address={val.address}
                           fountain={val.Fountain_address}
+                          id={index}
                         />
                       </Paper>
                     </Grid>

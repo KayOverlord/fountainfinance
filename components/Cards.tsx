@@ -21,18 +21,18 @@ function Cards(props) {
     setDeposit(e.target.value);
   }
   const send_deposit = () => {
- 
+
     //setDeposit(e.target.value);
     if(deposit.trim()!==null && parseFloat(deposit.trim())>0){
       try {
         send_signed_transaction(
-          Fountain,LP_Tokens[0].Fountain_address,
+          Fountain,LP_Tokens[props.id].Fountain_address,
           "approve",
-          [LP_Tokens[0].Fountain_address,
+          [LP_Tokens[props.id].Fountain_address,
           Web3.utils.toWei(deposit)]
           ).catch(error=>{
             if(error.code==4001){
-              alert("You have to approve this transaction in order to deposit")
+              alert("You have to approve this transaction first in order to deposit your "+props.title)
             }
           })
       } catch (error) {
