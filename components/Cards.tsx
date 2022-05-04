@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { contracts_address,LP_Tokens } from '../util/tokens&address';
 import Fountain from '../util/Abi/Fountain.json';
 import { useWeb3 } from '../hooks/Web3Contaxt';
+import Web3 from "web3";
 
 function Cards(props) {
   const [depositError, setError] = useState(false);
@@ -13,7 +14,7 @@ function Cards(props) {
   const [withdraw,setWithdraw] = useState("");
   const [WithdrawError,setWithdrawError]= useState(false);
   const [WithdrawErrorMessage,setWithdrawErrorMessage]=useState("");
-  const {get_contract_data,address}=useWeb3();
+  const {get_contract_data,send_signed_transaction,address}=useWeb3();
 
   const handleChange = (e) => {
     e.preventDefault()
@@ -23,8 +24,21 @@ function Cards(props) {
  
     //setDeposit(e.target.value);
     if(deposit.trim()!==null && parseFloat(deposit.trim())>0){
-      console.log("address",address);
-      get_contract_data(Fountain,LP_Tokens[0].Fountain_address,"approve",[LP_Tokens[0].Fountain_address,"100000000000000000000"])
+      try {
+        send_signed_transaction(
+          Fountain,LP_Tokens[0].Fountain_address,
+          "approve",
+          [LP_Tokens[0].Fountain_address,
+          Web3.utils.toWei(deposit)]
+          ).catch(error=>{
+            if(error.code==4001){
+              alert("You have to approve this transaction in order to deposit")
+            }
+          })
+      } catch (error) {
+       //
+      }
+      
   }
   }
 

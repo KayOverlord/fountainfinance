@@ -55,7 +55,7 @@ const Dashboard =()=>{
   const [gracePerSecond,setGracePerSecond] =useState("0");
   const [balance,setBalance] = useState("");
   const [endTime,setEndTime] = useState("");
-  const [userInfo,setUserInfo] = useState({amount:"",rewards:""});
+  const [userInfo,setUserInfo] = useState({amount:0,rewards:0});
 
   const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeNonNumeric = num => num.toString().replace(/[^0-9]/g, "");

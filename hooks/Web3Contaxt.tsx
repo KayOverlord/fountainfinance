@@ -190,9 +190,14 @@ const disconnectWallet =async()=>{
 * @param myContractAddress This is the bar parameter
 * @returns returns a string version of bar
 */
-const send_signed_transaction =async(Abi:[],ContractAddress:string)=>{
-//var myContract = new web3.eth.Contract(Abi,ContractAddress);
+const send_signed_transaction =async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
+var myContract = new web3.eth.Contract(Abi,ContractAddress);
 // myContract.methods.myMethod(123).send({from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'})
+if(params?.length){ 
+  return await myContract['methods'][methodName](...params).send({
+    'from':address
+    });
+}
 }
 
 const get_contract_data=async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
