@@ -186,16 +186,31 @@ const disconnectWallet =async()=>{
 }
 
 /*
-* This is the send_signed_transaction function
+* This is the send_transaction function
 * @param myContractAddress This is the bar parameter
 * @returns returns a string version of bar
 */
-const send_signed_transaction =async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
+const send_transaction =async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
 var myContract = new web3.eth.Contract(Abi,ContractAddress);
 // myContract.methods.myMethod(123).send({from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'})
+//console.log("gas",myContract.estimateGas({from:address}),"price",web3.eth.getGasPrice())
+//const estimateGas = await myContract.estimateGas({from:address});
+let gp: any;
+let gaslimit:any;
+web3.eth.getGasPrice().then(gasPrice => {
+  gp = gasPrice
+})
+myContract['methods'][methodName](...params).estimateGas({from:address})
+.then(function(gasAmount){
+    gaslimit=gasAmount
+})
+
+
 if(params?.length){ 
-  return await myContract['methods'][methodName](...params).send({
-    'from':address
+  return  myContract['methods'][methodName](...params).send({
+    from:address,
+    gas:gaslimit,
+    gasPrice:gp
     });
 }
 }
@@ -231,7 +246,7 @@ const values ={
     connected,
     connectWallet,
     disconnectWallet,
-    send_signed_transaction,
+    send_transaction,
     get_contract_data,
     get_balance
 }

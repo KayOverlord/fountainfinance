@@ -6,6 +6,11 @@ import { contracts_address,LP_Tokens } from '../util/tokens&address';
 import Fountain from '../util/Abi/Fountain.json';
 import { useWeb3 } from '../hooks/Web3Contaxt';
 import Web3 from "web3";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function Cards(props) {
   const [depositError, setError] = useState(false);
@@ -14,8 +19,18 @@ function Cards(props) {
   const [withdraw,setWithdraw] = useState("");
   const [WithdrawError,setWithdrawError]= useState(false);
   const [WithdrawErrorMessage,setWithdrawErrorMessage]=useState("");
-  const {get_contract_data,send_signed_transaction,address}=useWeb3();
+  const {get_contract_data,send_transaction,address}=useWeb3();
+  const [open, setOpen] = React.useState(false);
 
+  const fountainAddress =LP_Tokens[props.id].Fountain_address;
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleChange = (e) => {
     e.preventDefault()
     setDeposit(e.target.value);
@@ -25,21 +40,25 @@ function Cards(props) {
     //setDeposit(e.target.value);
     if(deposit.trim()!==null && parseFloat(deposit.trim())>0){
       try {
-        send_signed_transaction(
-          Fountain,LP_Tokens[props.id].Fountain_address,
+        send_transaction(
+          Fountain,fountainAddress,
           "approve",
-          [LP_Tokens[props.id].Fountain_address,
+          [fountainAddress,
           Web3.utils.toWei(deposit)]
-          ).catch(error=>{
+          ).then((results)=>{
+            get_contract_data(Fountain,fountainAddress,"allowance",[address,fountainAddress])
+
+          }).catch(error=>{
             if(error.code==4001){
-              alert("You have to approve this transaction first in order to deposit your "+props.title)
+              setDeposit("")
+              handleClickOpen()
             }
           })
       } catch (error) {
        //
+       console.error(error)
       }
-      
-  }
+      }
   }
 
   const WithdrawHandleChange =(e)=>{
@@ -121,6 +140,27 @@ function Cards(props) {
           </Typography>
         </AccordionDetails>
       </Accordion>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Hey Fountain Farmer"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+          You have to approve this transaction first in order to deposit your {props.title}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          
+          <Button onClick={handleClose} autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
       </>
     )
 }
