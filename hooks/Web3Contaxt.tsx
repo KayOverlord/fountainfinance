@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect,useState } from "react"
-import Web3 from "web3";
+//import Web3 from "web3";
 import Web3Modal from "web3modal";
 import { networkMap } from "../util/networks";
 import {providerOptions} from "../util/Web3Provider"
+import {ethers} from "ethers";
 
 
 
@@ -17,7 +18,8 @@ export const Web3Provider=({children})=>{
   const [connected,setConnected]=useState(false);
   const [provider,setProvider]=useState(null);
   const [web3Modal,setWeb3Modal]=useState(null);
-  const [web3,setWeb3]=useState(null);
+  const [library,setLibrary]=useState(null);
+
     
       // Chosen wallet provider given by the dialog window
    
@@ -53,12 +55,12 @@ export const Web3Provider=({children})=>{
         const handleChainChanged=(chainId)=>{
            // fatchAccountData()
            console.log("chain ID", chainId);
-           if(chainId!==web3.utils.toHex(networkMap.MUMBAI_TESTNET.chainId)){
+           if(chainId!==ethers.utils.hexlify(networkMap.MUMBAI_TESTNET.chainId)){
             handleDisconnect();
            }
         }
         const handleConnect=()=>{
-          fatchAccountData()
+          //fatchAccountData()
           setConnected(true)
           console.log("Websocket Provider connection established!");
 
@@ -101,9 +103,9 @@ const connectWallet=async()=>{
     setConnected(true)
    }else{
     const prov = await web3Modal.connect();
-    const w3 = new Web3(prov);
+    const library = new ethers.providers.Web3Provider(prov);
+    setLibrary(library)
     setProvider(prov)
-    setWeb3(w3)
     if (prov){
       setAddress(prov.selectedAddress);
       setConnected(true)
@@ -118,63 +120,6 @@ const connectWallet=async()=>{
 }
 
 
-const fatchAccountData=async()=>{
-  
-  // Check if MetaMask is installed
- // MetaMask injects the global API into window.ethereum
- if (provider) {
-  try {
-    // check if the chain to connect to is installed
-    await provider.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: web3.utils.toHex(networkMap.MUMBAI_TESTNET.chainId) }], // chainId must be in hexadecimal numbers
-    }).then(() => {
-      web3.eth.net.isListening(function (error, result) {
-        if (error) {
-          console.error(error);
-        } else {
-          setConnected(result);
-        }
-      });
-        web3.eth.getAccounts().then(async (addr:string[]) => {
-          return setAddress(addr);
-                    
-        });
-    });
-  } catch (error) {
-    // This error code indicates that the chain has not been added to MetaMask
-    // if it is not, then install it into the user MetaMask
-    if (error.code === 4902) {
-      try {
-       await provider.request({
-          method: 'wallet_addEthereumChain',
-          params: [networkMap.MUMBAI_TESTNET],
-        }).then(() => {
-          web3.eth.net.isListening(function (error, result) {
-            if (error) {
-              console.error(error);
-            } else {
-              setConnected(result);
-            }
-          });
-            web3.eth.getAccounts().then(async (addr:string[]) => {
-              return setAddress(addr);
-                        
-            });
-        });
-      } catch (addError) {
-        console.error("addError", addError);
-      }
-    }
-    console.error(error);
-  }
-} else {
-  // if no window.ethereum then MetaMask is not installed
-  alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
-} 
-  
-   
-}
 
 const disconnectWallet =async()=>{
   await web3Modal.clearCachedProvider();
@@ -191,47 +136,37 @@ const disconnectWallet =async()=>{
 * @returns returns a string version of bar
 */
 const send_transaction =async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
-var myContract = new web3.eth.Contract(Abi,ContractAddress);
+var myContract = new ethers.Contract(ContractAddress,Abi,library);
 // myContract.methods.myMethod(123).send({from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'})
 //console.log("gas",myContract.estimateGas({from:address}),"price",web3.eth.getGasPrice())
 //const estimateGas = await myContract.estimateGas({from:address});
-let gp: any;
-let gaslimit:any;
-web3.eth.getGasPrice().then(gasPrice => {
-  gp = gasPrice
-})
-myContract['methods'][methodName](...params).estimateGas({from:address})
-.then(function(gasAmount){
-    gaslimit=gasAmount
-})
-
+const feeData = await provider.getFeeData();
+console.log("fee",feeData);
 
 if(params?.length){ 
-  return  myContract['methods'][methodName](...params).send({
-    from:address,
-    gas:gaslimit,
-    gasPrice:gp
-    });
+  return await myContract[methodName](...params).then(callback);
 }
 }
 
 const get_contract_data=async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
-  var MyContract = new web3.eth.Contract(Abi,ContractAddress);
+  var MyContract = new ethers.Contract(ContractAddress,Abi,library);
+
   if(params?.length){ 
-    return await MyContract['methods'][methodName](...params).call(callback);
+    return await MyContract[methodName](...params).then(callback);
   }else{
-    return await MyContract['methods'][methodName]().call(callback);
+    return await MyContract[methodName]().then(callback);
   }
 }
 
 const get_balance=async(Abi:[],token_contract:string,contract:string)=>{
-  var MyContract = new web3.eth.Contract(Abi,token_contract);
-  return await MyContract.methods.balanceOf(contract).call(callback);
+  var MyContract = new ethers.Contract(token_contract,Abi,library);
+  return await MyContract.balanceOf(contract).then(callback);
   
 }
 
-const callback=(error, result)=>{
+const callback=(result,error)=>{
   if(result){
+
 return result
   }
   return "0";
@@ -240,7 +175,6 @@ return result
 
 const values ={
     web3Modal,
-    web3,
     provider,
     address,
     connected,

@@ -19,7 +19,7 @@ import Cards from '../components/Cards';
 import { LP_Tokens,contracts_address } from '../util/tokens&address';
 import Fountain from '../util/Abi/Fountain.json'
 import Angel from '../util/Abi/Angel.json';
-import Web3 from "web3";
+import {ethers} from "ethers";
 import ReactSvgPieChart from "react-svg-piechart"
 const drawerWidth: number = 240;
 
@@ -72,7 +72,7 @@ const Dashboard =()=>{
   useEffect(() => {
     get_contract_data(Angel,contracts_address.Angel,"gracePerSecond")
     .then(data=>{
-      setGracePerSecond(Web3.utils.fromWei(data))
+      setGracePerSecond(ethers.utils.formatEther(data))
     }
       );
       
@@ -85,7 +85,7 @@ const Dashboard =()=>{
       );
 
       get_balance(Fountain,contracts_address.RewardToken,contracts_address.Angel).then(data=>{
-        setBalance(addCommas(removeNonNumeric(Web3.utils.fromWei(data))))
+        setBalance(addCommas(removeNonNumeric(ethers.utils.formatEther(data))))
       });
 
       get_contract_data(Angel,contracts_address.Angel,"endTime")

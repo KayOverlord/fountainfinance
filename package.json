@@ -24,6 +24,7 @@
     "bitski": "^0.11.0",
     "dcent-provider": "^0.3.0-beta",
     "eth-provider": "^0.10.0",
+    "ethers": "^5.6.5",
     "formik": "^2.2.9",
     "fortmatic": "^2.2.1",
     "next": "12.0.10",
