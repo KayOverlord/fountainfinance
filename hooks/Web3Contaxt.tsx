@@ -43,7 +43,6 @@ export const Web3Provider=({children})=>{
        useEffect(()=>{
 
         const handleAccountsChanged=(accounts)=>{
-          console.log("accountsChanged", accounts);
           if(accounts.length >0){
             setConnected(true)
             setAddress(accounts)
@@ -54,7 +53,7 @@ export const Web3Provider=({children})=>{
 
         const handleChainChanged=(chainId)=>{
            // fatchAccountData()
-           console.log("chain ID", chainId);
+          
            if(chainId!==ethers.utils.hexlify(networkMap.MUMBAI_TESTNET.chainId)){
             handleDisconnect();
            }
@@ -164,13 +163,17 @@ const get_balance=async(Abi:[],token_contract:string,contract:string)=>{
   
 }
 
-const callback=(result,error)=>{
-  if(result){
-console.log(result)
-return result
+const callback = async(result, error,receipt) => {
+  if (result) {
+    return result;
   }
+
+  if (error) {
+    return error;
+  }
+
   return "0";
-}
+};
 
 
 const values ={

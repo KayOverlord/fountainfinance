@@ -36,8 +36,6 @@ function Cards(props) {
     setDeposit(e.target.value);
   }
   const send_deposit = () => {
-
-    //setDeposit(e.target.value);
     if(deposit.trim()!==null && parseFloat(deposit.trim())>0){
       try {
         send_transaction(
@@ -46,7 +44,7 @@ function Cards(props) {
           [fountainAddress,
           ethers.utils.parseEther(deposit)]
           ).then((results)=>{
-            //get_contract_data(Fountain,fountainAddress,"allowance",[address,fountainAddress])
+            //
 
           }).catch(error=>{
             if(error.code==4001){
@@ -65,6 +63,12 @@ function Cards(props) {
     e.preventDefault()
     setWithdraw(e.target.value);
   } 
+
+  const send_withdraw = ()=>{
+    get_contract_data(Fountain,fountainAddress,"allowance",[address,fountainAddress]).then(data=>{
+      console.log("receipt",data)
+    })
+  }
     return (
         <>
         <Accordion className={styles.card}>
@@ -105,7 +109,7 @@ function Cards(props) {
               error={WithdrawError}
               helperText={WithdrawErrorMessage}
             />
-            <Button  variant="contained" style={{ marginTop: 15,width:"100%"  }}>
+            <Button  variant="contained" onClick={send_withdraw} style={{ marginTop: 15,width:"100%"  }}>
               Withdraw your MATIC
             </Button>
             {/* <TextField
