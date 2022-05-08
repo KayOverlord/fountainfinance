@@ -19,7 +19,7 @@ export const Web3Provider=({children})=>{
   const [provider,setProvider]=useState(null);
   const [web3Modal,setWeb3Modal]=useState(null);
   const [library,setLibrary]=useState(null);
-
+  const [signer,setSigner]=useState(null);
     
       // Chosen wallet provider given by the dialog window
    
@@ -104,8 +104,10 @@ const connectWallet=async()=>{
    }else{
     const prov = await web3Modal.connect();
     const library = new ethers.providers.Web3Provider(prov);
+    const signer = library.getSigner();
     setLibrary(library)
     setProvider(prov)
+    setSigner(signer)
     if (prov){
       setAddress(prov.selectedAddress);
       setConnected(true)
@@ -136,12 +138,10 @@ const disconnectWallet =async()=>{
 * @returns returns a string version of bar
 */
 const send_transaction =async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
-var myContract = new ethers.Contract(ContractAddress,Abi,library);
-// myContract.methods.myMethod(123).send({from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'})
-//console.log("gas",myContract.estimateGas({from:address}),"price",web3.eth.getGasPrice())
-//const estimateGas = await myContract.estimateGas({from:address});
-const feeData = await provider.getFeeData();
-console.log("fee",feeData);
+var myContract = new ethers.Contract(ContractAddress,Abi,signer);
+
+//const feeData = await provider.getFeeData();
+
 
 if(params?.length){ 
   return await myContract[methodName](...params).then(callback);
@@ -166,7 +166,7 @@ const get_balance=async(Abi:[],token_contract:string,contract:string)=>{
 
 const callback=(result,error)=>{
   if(result){
-
+console.log(result)
 return result
   }
   return "0";

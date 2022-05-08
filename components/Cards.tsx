@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { contracts_address,LP_Tokens } from '../util/tokens&address';
 import Fountain from '../util/Abi/Fountain.json';
 import { useWeb3 } from '../hooks/Web3Contaxt';
-import Web3 from "web3";
+import {ethers} from "ethers";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -44,9 +44,9 @@ function Cards(props) {
           Fountain,fountainAddress,
           "approve",
           [fountainAddress,
-          Web3.utils.toWei(deposit)]
+          ethers.utils.parseEther(deposit)]
           ).then((results)=>{
-            get_contract_data(Fountain,fountainAddress,"allowance",[address,fountainAddress])
+            //get_contract_data(Fountain,fountainAddress,"allowance",[address,fountainAddress])
 
           }).catch(error=>{
             if(error.code==4001){
