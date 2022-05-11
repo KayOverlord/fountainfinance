@@ -52,14 +52,13 @@ export const Web3Provider=({children})=>{
         }
 
         const handleChainChanged=(chainId)=>{
-           // fatchAccountData()
           
            if(chainId!==ethers.utils.hexlify(networkMap.MUMBAI_TESTNET.chainId)){
             handleDisconnect();
            }
         }
         const handleConnect=()=>{
-          //fatchAccountData()
+          switchNetwork()
           setConnected(true)
           console.log("Websocket Provider connection established!");
 
@@ -98,10 +97,20 @@ export const Web3Provider=({children})=>{
 const connectWallet=async()=>{
   try {
    if(provider!==null){
-    setAddress(provider.selectedAddress);
-    setConnected(true)
+    
+    if(provider.chainId!==networkMap.POLYGON_MAINNET.chainId){
+      switchNetwork()
+    }else{
+      setAddress(provider.selectedAddress);
+      setConnected(true)
+    }
    }else{
     const prov = await web3Modal.connect();
+    
+    
+    if((prov.chainId).toString()!==(networkMap.POLYGON_MAINNET.chainId).toString()){
+      switchNetwork()
+    }else{
     const library = new ethers.providers.Web3Provider(prov);
     const signer = library.getSigner();
     setLibrary(library)
@@ -111,6 +120,7 @@ const connectWallet=async()=>{
       setAddress(prov.selectedAddress);
       setConnected(true)
     }
+  }
    }
    //fatchAccountData();
   } catch (error) {
@@ -131,6 +141,28 @@ const disconnectWallet =async()=>{
  return;
 }
 
+const switchNetwork = async () => {
+  try {
+    await library.provider.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: networkMap.POLYGON_MAINNET.chainId }], // chainId must be in hexadecimal numbers
+    });
+  } catch (switchError) {
+    // This error code indicates that the chain has not been added to MetaMask.
+    if (switchError.code === 4902) {
+      try {
+        await provider.request({
+           method: 'wallet_addEthereumChain',
+           params: [networkMap.MUMBAI_TESTNET],
+         });
+       } catch (addError) {
+         console.error("addError", addError);
+       }
+    }
+  }finally{
+    connectWallet()
+  }
+};
 /*
 * This is the send_transaction function
 * @param myContractAddress This is the bar parameter
