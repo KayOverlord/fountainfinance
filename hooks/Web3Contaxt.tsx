@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect,useState } from "react"
-//import Web3 from "web3";
 import Web3Modal from "web3modal";
 import { networkMap } from "../util/networks";
 import {providerOptions} from "../util/Web3Provider"
@@ -14,7 +13,7 @@ return useContext(context)
 }
 
 export const Web3Provider=({children})=>{
-  const [address,setAddress]=useState<string[]>();
+  const [address,setAddress]=useState("");
   const [connected,setConnected]=useState(false);
   const [provider,setProvider]=useState(null);
   const [web3Modal,setWeb3Modal]=useState(null);
@@ -97,7 +96,7 @@ export const Web3Provider=({children})=>{
 const connectWallet=async()=>{
   try {
    if(provider!==null){
-    
+    console.log("check provider1",provider)
     if(provider.chainId!==networkMap.POLYGON_MAINNET.chainId){
       switchNetwork()
     }else{
@@ -108,7 +107,7 @@ const connectWallet=async()=>{
     const prov = await web3Modal.connect();
     
     
-    if((prov.chainId).toString()!==(networkMap.POLYGON_MAINNET.chainId).toString()){
+    if(prov.chainId!==(networkMap.POLYGON_MAINNET.chainId).toString()){
       switchNetwork()
     }else{
     const library = new ethers.providers.Web3Provider(prov);
@@ -116,13 +115,16 @@ const connectWallet=async()=>{
     setLibrary(library)
     setProvider(prov)
     setSigner(signer)
-    if (prov){
-      setAddress(prov.selectedAddress);
+    signer.getAddress().then(result => {
+      setAddress(result);
       setConnected(true)
-    }
+    }).catch(err => {
+      console.error("getAddress_Error",err);
+    })
+  
   }
    }
-   //fatchAccountData();
+
   } catch (error) {
     console.log("Could not get a wallet connection", error,provider);
     return;
@@ -153,7 +155,7 @@ const switchNetwork = async () => {
       try {
         await provider.request({
            method: 'wallet_addEthereumChain',
-           params: [networkMap.MUMBAI_TESTNET],
+           params: [networkMap.POLYGON_MAINNET],
          });
        } catch (addError) {
          console.error("addError", addError);
