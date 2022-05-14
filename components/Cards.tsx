@@ -44,7 +44,13 @@ function Cards(props) {
           [fountainAddress,
           ethers.utils.parseEther(deposit)]
           ).then((results)=>{
-            //
+            send_transaction(
+              Fountain,fountainAddress,
+              "joinAngel",
+              [contracts_address.Angel]).then((results)=>{
+                //
+                console.log("results",results);
+              })
 
           }).catch(error=>{
             if(error.code==4001){

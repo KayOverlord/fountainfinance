@@ -20,9 +20,7 @@ export const Web3Provider=({children})=>{
   const [library,setLibrary]=useState(null);
   const [signer,setSigner]=useState(null);
     
-      // Chosen wallet provider given by the dialog window
    
-
     useEffect(() => {
       
         const sub =async()=>{
@@ -217,19 +215,3 @@ return(
 )
 
 }
-
-/*
-
-   .on('transactionHash', function(hash){
-        console.log("HASH",hash)
-    })
-    .on('receipt', function(receipt){
-      console.log("Receipt",receipt)
-    })
-    .on('confirmation', function(confirmationNumber, receipt){
-      console.log("confirmationNumber",confirmationNumber)
-    })
-    .on('error', function(error, receipt) {
-      console.log("CALL ERROR",error)
-    });
-*/
