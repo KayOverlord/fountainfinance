@@ -52,7 +52,7 @@ export const Web3Provider=({children})=>{
 
         const handleChainChanged=(chainId)=>{
           
-           if(chainId!==ethers.utils.hexlify(networkMap.MUMBAI_TESTNET.chainId)){
+           if(chainId!==networkMap.POLYGON_MAINNET.chainId){
             handleDisconnect();
            }
         }
@@ -94,42 +94,33 @@ export const Web3Provider=({children})=>{
      
 
 const connectWallet=async()=>{
+ const chain =ethers.utils.hexlify(ethers.utils.toUtf8Bytes(window.ethereum.networkVersion));
+
+ if(chain!==networkMap.POLYGON_MAINNET.chainId){
+  switchNetwork()
+ }
   try {
-   if(provider!==null){
-    console.log("check provider1",provider)
-    if(provider.chainId!==networkMap.POLYGON_MAINNET.chainId){
-      switchNetwork()
-    }else{
-      setAddress(provider.selectedAddress);
-      setConnected(true)
-    }
-   }else{
     const prov = await web3Modal.connect();
-    
-    
-    if(prov.chainId!==(networkMap.POLYGON_MAINNET.chainId).toString()){
-      switchNetwork()
-    }else{
+    setProvider(prov);
+
     const library = new ethers.providers.Web3Provider(prov);
-    const signer = library.getSigner();
     setLibrary(library)
-    setProvider(prov)
-    setSigner(signer)
+
+    const signer = library.getSigner();
+    setSigner(signer);
+
     signer.getAddress().then(result => {
       setAddress(result);
       setConnected(true)
     }).catch(err => {
       console.error("getAddress_Error",err);
     })
-  
-  }
-   }
 
   } catch (error) {
     console.log("Could not get a wallet connection", error,provider);
-    return;
   }
-    return;  
+
+
 }
 
 
@@ -145,7 +136,7 @@ const disconnectWallet =async()=>{
 
 const switchNetwork = async () => {
   try {
-    await library.provider.request({
+    await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: networkMap.POLYGON_MAINNET.chainId }], // chainId must be in hexadecimal numbers
     });
@@ -153,7 +144,7 @@ const switchNetwork = async () => {
     // This error code indicates that the chain has not been added to MetaMask.
     if (switchError.code === 4902) {
       try {
-        await provider.request({
+        await window.ethereum.request({
            method: 'wallet_addEthereumChain',
            params: [networkMap.POLYGON_MAINNET],
          });
@@ -161,8 +152,6 @@ const switchNetwork = async () => {
          console.error("addError", addError);
        }
     }
-  }finally{
-    connectWallet()
   }
 };
 /*
