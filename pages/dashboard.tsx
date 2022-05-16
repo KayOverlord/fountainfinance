@@ -78,8 +78,9 @@ const Dashboard =()=>{
       
       get_contract_data(Angel,contracts_address.Angel,"userInfo",["0",address])
     .then(data=>{
-      let amount = data.amount;
-      let rewards = data.rewardDebt;
+      let amount = parseInt(data.amount);
+      let rewards = parseInt(data.rewardDebt);
+    
       setUserInfo({amount,rewards})
     }
       );
