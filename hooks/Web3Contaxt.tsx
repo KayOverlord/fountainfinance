@@ -167,7 +167,14 @@ if(params?.length){
   return await myContract[methodName](...params).then(callback);
 }
 }
-
+/**
+* This is the get_contract_data function
+* @param Abi This is the bar parameter
+* @param ContractAddress This is the bar parameter
+* @param methodName This is the bar parameter
+* @param params This is the bar parameter
+* @returns returns a string version of bar
+*/
 const get_contract_data=async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
   var MyContract = new ethers.Contract(ContractAddress,Abi,library);
 
