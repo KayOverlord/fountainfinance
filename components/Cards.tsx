@@ -110,7 +110,7 @@ function Cards(props) {
               helperText={depositErrorMessage}
             />
             <Button variant="contained" onClick={send_deposit} style={{ marginTop: 18,marginBottom: 15,width:"100%" }}>
-              Deposit your MATIC
+              Deposit your {props.title}
             </Button>
             <TextField
               variant="outlined" 
@@ -123,7 +123,7 @@ function Cards(props) {
               helperText={WithdrawErrorMessage}
             />
             <Button  variant="contained" onClick={send_withdraw} style={{ marginTop: 15,width:"100%"  }}>
-              Withdraw your MATIC
+              Withdraw your {props.title}
             </Button>
             {/* <TextField
               variant="outlined" 

@@ -86,7 +86,7 @@ const Dashboard =()=>{
       );
 
       get_balance(Fountain,contracts_address.RewardToken,contracts_address.Angel).then(data=>{
-        setBalance(addCommas(removeNonNumeric(ethers.utils.formatEther(data))))
+        setBalance(addCommas(ethers.utils.formatEther(data)))
       });
 
       get_contract_data(Angel,contracts_address.Angel,"endTime")
