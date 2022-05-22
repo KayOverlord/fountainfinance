@@ -193,6 +193,7 @@ const get_balance=async(Abi:[],token_contract:string,contract:string)=>{
 
 const callback = async(result, error,receipt) => {
   if (result) {
+    
     return result;
   }
 

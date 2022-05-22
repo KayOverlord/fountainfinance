@@ -26,7 +26,7 @@ export const LP_Tokens =[{
     image:"https://polygonscan.com/token/images/bnb_28_2.png"
 },
 {
-    title:"Wrapped Ether",
+    title:"WETH",
     address:"0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f6193",
     Fountain_address:"0x77B9F288053685D0876387d9b4D8C1A3e2Aa6018",
     symbol:"FTN-WETH",

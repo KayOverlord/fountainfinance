@@ -19,10 +19,19 @@ import Cards from '../components/Cards';
 import { LP_Tokens,contracts_address } from '../util/tokens&address';
 import Fountain from '../util/Abi/Fountain.json'
 import Angel from '../util/Abi/Angel.json';
+import styles from '../styles/Home.module.css';
 import {ethers} from "ethers";
-import ReactSvgPieChart from "react-svg-piechart"
-const drawerWidth: number = 240;
+import ReactSvgPieChart from "react-svg-piechart";
+import Image from 'next/image';
+import Logo from '../icons/image.svg';
+import Modal from '@mui/material/Modal';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
 
+
+
+const drawerWidth: number = 240;
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
@@ -49,6 +58,8 @@ const AppBar = styled(MuiAppBar, {
 
 const Dashboard =()=>{
   const [open, setOpen] = useState(true);
+  const [openModal,setOpenModal]= useState(false);
+  const [stepNumber,setStepNumber]= useState(1);
   const {address,connected,disconnectWallet,get_contract_data, get_balance}=useWeb3();
   const router = useRouter();
 
@@ -63,6 +74,21 @@ const Dashboard =()=>{
     {title: "Amount", value:userInfo.amount, color:theme.palette.primary.main},
     {title: "Rewards", value:userInfo.rewards, color:theme.palette.secondary.main}
   ]
+  const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () =>{ setOpen(false)}
+  
   useEffect(() => {
     if(connected==false){
       router.push("/");
@@ -105,9 +131,11 @@ const Dashboard =()=>{
     setOpen(!open);
   };
 
-
-
-
+  const steps = [
+    'Approve the transaction',
+    'Deposit your tokens',
+    'Stake your tokens for rewards',
+  ];
 
   return (
     <ThemeProvider theme={theme}>
@@ -268,8 +296,13 @@ const Dashboard =()=>{
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
+                    justifyContent: "center",
+                   
                   }}
-                ></Paper>
+                >
+                   <Image src={Logo} alt="SVG logo image"/>
+                    
+                </Paper>
               </Grid>
 
               {LP_Tokens &&
@@ -291,6 +324,8 @@ const Dashboard =()=>{
                           address={val.address}
                           fountain={val.Fountain_address}
                           id={index}
+                          stepNum={setStepNumber}
+                          openStepper={setOpenModal}
                         />
                       </Paper>
                     </Grid>
@@ -300,6 +335,23 @@ const Dashboard =()=>{
           </Container>
         </Box>
       </Box>
+      <Modal
+        open={openModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Stepper activeStep={stepNumber} alternativeLabel>
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      {stepNumber==3? <Button onClick={()=>setOpenModal(false)}><Typography color={"green"} fontSize="bold">Success</Typography></Button>:null}
+        </Box>
+      </Modal>
     </ThemeProvider>
   );
 }

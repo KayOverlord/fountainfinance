@@ -114,6 +114,11 @@
   height: 1em;
   margin-left: 0.5rem;
 }
+.svg {
+  width: 250px;
+  height: 450px;
+  background-color: coral;
+}
 
 @media (max-width: 600px) {
   .grid {

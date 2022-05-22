@@ -25,10 +25,6 @@ function Cards(props) {
 
   const fountainAddress =LP_Tokens[props.id].Fountain_address;
 
-
-
-
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -42,32 +38,48 @@ function Cards(props) {
   }
   const send_deposit = () => {
     if(deposit.trim()!==null && parseFloat(deposit.trim())>0){
-      try {
         send_transaction(
           Fountain,fountainAddress,
           "approve",
           [fountainAddress,
           ethers.utils.parseEther(deposit)]
           ).then((results)=>{
-            send_transaction(
-              Fountain,fountainAddress,
-              "joinAngel",
-              [contracts_address.Angel]).then((results)=>{
-                //
-                console.log("results",results);
-              })
-
+            props.openStepper(true)
+            props.stepNum(1);
+            console.log("deposit_results",results);
+            results.wait().then(res=>{
+              console.log("deposit_res",res);
+            })
+            depositToken();
           }).catch(error=>{
+            props.openStepper(false)
             if(error.code==4001){
               setDeposit("")
               handleClickOpen()
             }
           })
-      } catch (error) {
-       //
-       console.error(error)
       }
-      }
+  }
+
+  const depositToken= () => {
+    send_transaction(
+      Fountain,fountainAddress,
+      "deposit",
+      [ethers.utils.parseEther(deposit)]).then((results)=>{
+        props.stepNum(2);
+        console.log("deposit_results",results);
+        stakingToken()
+      }).catch(error=>{props.openStepper(false)})
+  }
+
+  const stakingToken=() => {
+    send_transaction(
+      Fountain,fountainAddress,
+      "joinAngel",
+      [contracts_address.Angel]).then((results)=>{
+        props.stepNum(3);
+        console.log("join_results",results);
+      }).catch(error=>{props.openStepper(false)})
   }
 
   const WithdrawHandleChange =(e)=>{
