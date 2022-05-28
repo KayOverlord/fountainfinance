@@ -2,16 +2,10 @@ import ComboAbi from "./Abi/combo-abi.json"
 import BnBAbi from "./Abi/bnb-abi.json"
 import WethAbi from "./Abi/weth-abi.json"
 import GoliAbi from "./Abi/goli-abi.json"
-import MaticAbi from "./Abi/matic-abi.json"
+import WMaticAbi from "./Abi/wmatic-abi.json"
+import SANDAbi from "./Abi/Sand-abi.json"
 
 export const LP_Tokens =[{
-    title:"MATIC",
-    address:"0x0000000000000000000000000000000000001010",
-    Fountain_address:"0x252F5FB243B656ceFffEBcF7926796a2048E02f9",
-    symbol:"FTN-MATIC",
-    image:"https://polygonscan.com/token/images/matic_32.png",
-    Abi:MaticAbi
-},{
     title:"COMBO",
     address:"0x6DdB31002abC64e1479Fc439692F7eA061e78165",
     Fountain_address:"0x0ab865137ddb23e99447369A0340C7eB92Ad1C0F",
@@ -34,6 +28,13 @@ export const LP_Tokens =[{
     symbol:"FTN-WETH",
     image:"https://polygonscan.com/token/images/wETH_32.png",
     Abi:WethAbi
+},{
+    title:"WMATIC",
+    address:"0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+    Fountain_address:"0x9EEB47fa2D9b24f136D8BA4e0303Ca95A288481A",
+    symbol:"FTN-WMATIC",
+    image:"https://polygonscan.com/token/images/wMatic_32.png",
+    Abi:WMaticAbi
 },
 {
     title:"GOLI",
@@ -43,7 +44,14 @@ export const LP_Tokens =[{
     image:"https://polygonscan.com/token/images/golinenetwork_32.png",
     Abi:GoliAbi
 },
-
+{
+    title:"SAND",
+    address:"0xBbba073C31bF03b8ACf7c28EF0738DeCF3695683",
+    Fountain_address:"0x7A0862e1170E38dd912151eBfdFF8F9242F61D08",
+    symbol:"FTN-SAND",
+    image:"https://polygonscan.com/token/images/sand_32.png",
+    Abi:SANDAbi 
+},
 
 ]
 
