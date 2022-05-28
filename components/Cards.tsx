@@ -59,7 +59,7 @@ function Cards(props) {
       TokenAbi,TokenAddress,
       "approve",
       [fountainAddress,
-        parseFloat(deposit)*1e18]
+        ethers.utils.parseEther(deposit)]
       ).then((results)=>{
         props.openStepper(true)
         
@@ -83,7 +83,7 @@ function Cards(props) {
     send_transaction(
       Fountain,fountainAddress,
       "deposit",
-      [parseFloat(deposit)*1e18]).then((results)=>{
+      [ethers.utils.parseEther(deposit)]).then((results)=>{
        
         
         results.wait().then(res=>{
