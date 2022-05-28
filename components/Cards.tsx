@@ -3,7 +3,8 @@ import styles from '../styles/Home.module.css';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { contracts_address,LP_Tokens } from '../util/tokens&address';
-import Fountain from '../util/Abi/Fountain.json';
+
+import Fountain from '../util/Abi/Fountain.json'
 import Angel from '../util/Abi/Angel.json';
 import { useWeb3 } from '../hooks/Web3Contaxt';
 import {ethers} from "ethers";
@@ -22,8 +23,11 @@ function Cards(props) {
   const [WithdrawErrorMessage,setWithdrawErrorMessage]=useState("");
   const {get_contract_data,send_transaction,address}=useWeb3();
   const [open, setOpen] =useState(false);
+  const [errorMsg,setErrorMsg] = useState("");
 
   const fountainAddress =LP_Tokens[props.id].Fountain_address;
+  const TokenAddress = LP_Tokens[props.id].address;
+  const TokenAbi = LP_Tokens[props.id].Abi;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -38,37 +42,56 @@ function Cards(props) {
   }
   const send_deposit = () => {
     if(deposit.trim()!==null && parseFloat(deposit.trim())>0){
-        send_transaction(
-          Fountain,fountainAddress,
-          "approve",
-          [fountainAddress,
-          ethers.utils.parseEther(deposit)]
-          ).then((results)=>{
-            props.openStepper(true)
-            props.stepNum(1);
-            console.log("deposit_results",results);
-            results.wait().then(res=>{
-              console.log("deposit_res",res);
-            })
-            depositToken();
-          }).catch(error=>{
-            props.openStepper(false)
-            if(error.code==4001){
-              setDeposit("")
-              handleClickOpen()
-            }
-          })
-      }
+      // if(parseInt(deposit)>0){
+      //   start_sending_deposit()
+      // }else{
+      //   setErrorMsg("A minimum of 1 " +props.title+" is required to stake")
+      //   handleClickOpen()
+      // }
+      // }
+      start_sending_deposit()
+    }
   }
 
+  const start_sending_deposit=()=>{
+    console.log("start_sending_deposit")
+    send_transaction(
+      TokenAbi,TokenAddress,
+      "approve",
+      [fountainAddress,
+        parseFloat(deposit)*1e18]
+      ).then((results)=>{
+        props.openStepper(true)
+        
+        // console.log("deposit_results",results);
+        results.wait().then(res=>{
+          props.stepNum(1);
+          console.log("approve_res",res);
+          depositToken();
+        })
+        
+      }).catch(error=>{
+        props.openStepper(false)
+        if(error.code==4001){
+          setDeposit("")
+          setErrorMsg("You have to approve this transaction first in order to deposit your "+props.title)
+          handleClickOpen()
+        }
+      })
+  }
   const depositToken= () => {
     send_transaction(
       Fountain,fountainAddress,
       "deposit",
-      [ethers.utils.parseEther(deposit)]).then((results)=>{
-        props.stepNum(2);
-        console.log("deposit_results",results);
-        stakingToken()
+      [parseFloat(deposit)*1e18]).then((results)=>{
+       
+        
+        results.wait().then(res=>{
+          props.stepNum(2);
+          console.log("deposit_res",res);
+          stakingToken()
+        })
+        
       }).catch(error=>{props.openStepper(false)})
   }
 
@@ -180,7 +203,7 @@ function Cards(props) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-          You have to approve this transaction first in order to deposit your {props.title}
+          {errorMsg}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

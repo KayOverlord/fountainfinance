@@ -297,11 +297,18 @@ const Dashboard =()=>{
                     flexDirection: "column",
                     height: 240,
                     justifyContent: "center",
+                    alignItems: "center",
                    
                   }}
                 >
                    <Image src={Logo} alt="SVG logo image"/>
-                    
+                   <Typography
+                      fontSize={13}
+                      color="inherit"
+                      letterSpacing={8}
+                    >
+                      Fountain Finance
+                    </Typography>
                 </Paper>
               </Grid>
 
