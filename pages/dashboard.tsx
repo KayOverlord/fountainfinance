@@ -28,7 +28,7 @@ import Modal from '@mui/material/Modal';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-
+import CanvasBackground from '../components/CanvasBackground';
 
 
 const drawerWidth: number = 240;
@@ -139,6 +139,7 @@ const Dashboard =()=>{
 
   return (
     <ThemeProvider theme={theme}>
+      <CanvasBackground/>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute">
@@ -191,7 +192,7 @@ const Dashboard =()=>{
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) => theme.palette.background.default,
+            backgroundColor: "transparent",
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",

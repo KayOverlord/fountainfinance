@@ -1,8 +1,11 @@
 .container {
-  padding: 0 2rem;
+  padding:0;
   width:'100vw'
 }
-
+.canvasBg{
+  position: absolute;
+  z-index: -1;
+}
 .main {
   min-height: 100vh;
   padding: 4rem 0;

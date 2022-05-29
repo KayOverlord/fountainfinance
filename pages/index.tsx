@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
@@ -12,12 +12,12 @@ import { useRouter } from 'next/router'
 import { useWeb3 } from '../hooks/Web3Contaxt';
 import Logo from '../icons/image.svg';
 import Typewriter from 'typewriter-effect';
+import CanvasBackground from '../components/CanvasBackground'
 
-
-const Home=()=>{
+const Home=({timeout=50})=>{
 const {connectWallet,connected}=useWeb3();
 const router = useRouter();
-  
+
 useEffect(() => {
   
   if(connected==true){
@@ -26,12 +26,11 @@ useEffect(() => {
 }, [!connected]);
 
 
-
   return (
     <div
       className={styles.container}
       style={{
-        backgroundColor: theme.palette.background.default,
+        backgroundColor:"transparent",
       }}
     >
       <Head>
@@ -41,19 +40,16 @@ useEffect(() => {
       </Head>
 
       <main className={styles.main}>
-        <Image src={Logo} alt="SVG logo image" width={250} height={250} />
-        <Typography className={styles.title}>
+        <CanvasBackground />
+        <Image src={Logo} alt="SVG logo image" width={460} height={250} />
+        <Typography className={styles.title} pb={8}>
           <Typewriter
             options={{
-              strings: [" Welcome to the Fountain Farm", "A Fountain Finance product"],
+              strings: ["Hey you...","Welcome to Fountain Finance", "A Goli product","Connect now...."],
               autoStart: true,
               loop: true,
             }}
           />
-        </Typography>
-
-        <Typography color="primary" pt={2} >
-          Get started yield farming
         </Typography>
 
         <Grid
@@ -64,6 +60,7 @@ useEffect(() => {
             justifyContent: "center",
             alignItems: "center",
           }}
+          
         >
           <Grid item>
             <Button
@@ -74,7 +71,18 @@ useEffect(() => {
               CONNECT
             </Button>
           </Grid>
+          
         </Grid>
+        <div style={{ 
+          backgroundColor:theme.palette.background.paper,
+          width:"100vw",
+          height:"12vh",
+          position:"absolute",
+         bottom:0,
+         zIndex:10
+          }}>
+          <Typography>hello</Typography>
+        </div>
       </main>
     </div>
   );
