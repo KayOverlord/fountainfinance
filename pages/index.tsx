@@ -45,8 +45,19 @@ useEffect(() => {
 
       <main className={styles.main}>
         <CanvasBackground />
+        <Grid
+          container
+         
+          style={{
+            display: "flex",
+            flexDirection:"column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          
+        >
         <Image src={Logo} alt="SVG logo image" width={460} height={250} />
-        <Typography className={styles.title} pb={6}>
+        <div className={styles.title}>
           <Typewriter
             options={{
               strings: ["Hey you...","Welcome to Fountain Finance", "A Goli product","Connect now...."],
@@ -54,10 +65,12 @@ useEffect(() => {
               loop: true,
             }}
           />
-        </Typography>
+        </div>
+        </Grid>
 
         <Grid
           container
+          pt={1}
           spacing={2}
           style={{
             display: "flex",
@@ -75,7 +88,7 @@ useEffect(() => {
               CONNECT
             </Button>
           </Grid>
-          <Grid container  spacing={1} style={{ 
+          <Grid container style={{ 
           backgroundColor:theme.palette.background.paper,
           position: "fixed",
           right:0,
@@ -90,21 +103,21 @@ useEffect(() => {
           alignItems:"center",
           }}>
             <Grid item>
-         <Typography fontSize={20} pr={1}>System designed by:</Typography>
+         <Typography fontSize={20} pr={1}>Trevi System design by:</Typography>
          </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={12} md={2}>
          <Image src={FuruLogo} alt="SVG logo image" width={200} height={30} />
          </Grid>
-         <Grid item >
+         <Grid item xs={false}>
          <Typography fontSize={20} pr={1} >Audited by:</Typography>
          </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={false} md={2}>
          <Image src={ChainLogo} alt="SVG logo image" width={200} height={50} />
          </Grid>
-         <Grid item xs={2}>
+         <Grid item xs={false} md={2}>
          <Image src={PackLogo} alt="SVG logo image" width={200} height={50} />
          </Grid>
-         <Grid item xs={2}>
+         <Grid item xs={false} md={2}>
          <Typography fontSize={30} fontWeight={'bold'}>HashCloak</Typography>
          </Grid>
         </Grid>

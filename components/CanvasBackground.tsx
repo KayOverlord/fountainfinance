@@ -9,22 +9,29 @@ const CanvasBackground=({timeout=50})=>{
 
 const canvas = useRef();
 useEffect(() => {
+ 
+  if(typeof window !== 'undefined'){
   const context = canvas.current.getContext('2d');
 
-  const width = document.body.offsetWidth;
-  const height = document.body.offsetHeight;
-  canvas.current.width = width;
-  canvas.current.height = height;
-
-  context.fillStyle =  theme.palette.background.default;
+  let width = window.innerWidth;
+  let height = window.screen.height;
+  const handleResize =()=>{
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.current.width = width;
+    canvas.current.height = height;
+    context.fillStyle =  theme.palette.background.default;
   context.fillRect(0, 0, width, height);
+  }
+
+
+  
 
   // calculate how many 'lines' to show and animate
   const columns = Math.floor(width / 20) + 1;
   const yPositions = Array.from({ length: columns }).fill(0);
 
-  context.fillStyle =  theme.palette.background.default;
-  context.fillRect(0, 0, width, height);
+  
 
   const matrixEffect = () => {
       context.fillStyle = '#0001';
@@ -45,11 +52,14 @@ useEffect(() => {
           }
       });
   };
-
+  handleResize()
+window.addEventListener('resize',handleResize)
   const interval = setInterval(matrixEffect, timeout);
   return () => {
       clearInterval(interval);
+      window.removeEventListener('resize',handleResize)
   };
+}
 }, [canvas, timeout]);
 
   return (
