@@ -11,8 +11,12 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
 import { useWeb3 } from '../hooks/Web3Contaxt';
 import Logo from '../icons/image.svg';
+import ChainLogo from '../icons/chainS.png';
+import PackLogo from '../icons/packshi.png';
+import FuruLogo from '../icons/furuC.png';
 import Typewriter from 'typewriter-effect';
 import CanvasBackground from '../components/CanvasBackground'
+import { height } from '@mui/system';
 
 const Home=({timeout=50})=>{
 const {connectWallet,connected}=useWeb3();
@@ -42,7 +46,7 @@ useEffect(() => {
       <main className={styles.main}>
         <CanvasBackground />
         <Image src={Logo} alt="SVG logo image" width={460} height={250} />
-        <Typography className={styles.title} pb={8}>
+        <Typography className={styles.title} pb={6}>
           <Typewriter
             options={{
               strings: ["Hey you...","Welcome to Fountain Finance", "A Goli product","Connect now...."],
@@ -71,18 +75,41 @@ useEffect(() => {
               CONNECT
             </Button>
           </Grid>
-          
-        </Grid>
-        <div style={{ 
+          <Grid container  spacing={1} style={{ 
           backgroundColor:theme.palette.background.paper,
-          width:"100vw",
-          height:"12vh",
-          position:"absolute",
-         bottom:0,
-         zIndex:10
+          position: "fixed",
+          right:0,
+          left: 0,
+          bottom: 0,
+          width: "100%",
+          color: "white",
+          height:"15vh",
+          display:"flex",
+          flexDirection:"row",
+          justifyContent:"center",
+          alignItems:"center",
           }}>
-          <Typography>hello</Typography>
-        </div>
+            <Grid item>
+         <Typography fontSize={20} pr={1}>System designed by:</Typography>
+         </Grid>
+          <Grid item xs={2}>
+         <Image src={FuruLogo} alt="SVG logo image" width={200} height={30} />
+         </Grid>
+         <Grid item >
+         <Typography fontSize={20} pr={1} >Audited by:</Typography>
+         </Grid>
+          <Grid item xs={2}>
+         <Image src={ChainLogo} alt="SVG logo image" width={200} height={50} />
+         </Grid>
+         <Grid item xs={2}>
+         <Image src={PackLogo} alt="SVG logo image" width={200} height={50} />
+         </Grid>
+         <Grid item xs={2}>
+         <Typography fontSize={30} fontWeight={'bold'}>HashCloak</Typography>
+         </Grid>
+        </Grid>
+        </Grid>
+
       </main>
     </div>
   );
