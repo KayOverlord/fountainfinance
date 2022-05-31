@@ -155,7 +155,7 @@ const Dashboard =()=>{
   }
   return (
     <ThemeProvider theme={theme}>
-      <CanvasBackground/>
+      <CanvasBackground />
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute">
@@ -215,149 +215,163 @@ const Dashboard =()=>{
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
+          <Grid container spacing={0}>
+            <Grid item xs={12} md={3} lg={3}>
+              <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
                 <Paper
                   sx={{
                     p: 2,
                     display: "flex",
                     flexDirection: "column",
-                    minHeight: 240,
+                    minHeight: 340,
                   }}
-                >
-                  <Grid container>
-                  <Grid item xs={12} md={8} >
-                  <Grid item>
-                    <Typography
-                      variant="h4"
-                      color="inherit"
-                      style={{ overflowWrap: "break-word" }}
-                    >
-                      Goli supply{" "}
-                    </Typography>
-                    <Typography
-                        variant="h5"
-                        color="primary"
-                        style={{
-                          textShadow:
-                            "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
-                        }}
-                      >
-                        {balance}
-                      </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography
-                      variant="h4"
-                      color="inherit"
-                      style={{ overflowWrap: "break-word" }}
-                    >
-                      Distribution per second{" "}
-                    </Typography>
-                    <Typography
-                        variant="h5"
-                        color="primary"
-                        style={{
-                          textShadow:
-                            "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
-                        }}
-                      >
-                        {gracePerSecond}
-                      </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography
-                      variant="h4"
-                      color="inherit"
-                      style={{ overflowWrap: "break-word" }}
-                    >
-                      End of distribution{" "}
-                    </Typography>
-                    <Typography
-                        variant="h5"
-                        color="primary"
-                        style={{
-                          textShadow:
-                            "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
-                        }}
-                      >
-                        {endTime}
-                      </Typography>
-                  </Grid>
-                  </Grid>
-                  <Grid item xs={12} md={4} >
-                    <ReactSvgPieChart
-                      strokeWidth={0}
-                      data={data}
-                      startAngle={90}
-                      // If you need expand on hover (or touch) effect
-                      expandOnHover
-                      // If you need custom behavior when sector is hovered (or touched)
-                      onSectorHover={(d, i, e) => {
-                        if (d) {
-                          console.log("Data:",d.title);
-                        }
-                      }}
-                    />
-                  </Grid>
-                  </Grid>
-                </Paper>
-              </Grid>
-
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                    justifyContent: "center",
-                    alignItems: "center",
-                   
-                  }}
-                >
-                   <Image src={Logo} alt="SVG logo image"/>
-                   <Typography
-                      fontSize={13}
-                      color="inherit"
-                      letterSpacing={8}
-                    >
-                      Fountain Finance
-                    </Typography>
-                </Paper>
-              </Grid>
-
-              {LP_Tokens &&
-                LP_Tokens.map((val, index) => {
-                 
-                  return (
-                    <Grid item xs={12} md={4} lg={4} key={index}>
-                      <Paper
-                        sx={{
-                          p: 3,
-                          display: "flex",
-                          flexDirection: "column",
-                          width: "100%",
-                        }}
-                      >
-                        <Cards
-                          title={val.title}
-                          img={val.image}
-                          address={val.address}
-                          fountain={val.Fountain_address}
-                          id={index}
-                          stepNum={setStepNumber}
-                          openStepper={setOpenModal}
-                        />
-                      </Paper>
-                    </Grid>
-                  );
-                })}
+                ></Paper>
+              </Container>
             </Grid>
-            
-          </Container>
+
+            <Grid item xs={12} md={9} lg={9}>
+              <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+                <Grid container spacing={3}>
+                  {/* Chart */}
+                  <Grid item xs={12} md={8} lg={9}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        display: "flex",
+                        flexDirection: "column",
+                        minHeight: 240,
+                      }}
+                    >
+                      <Grid container>
+                        <Grid item xs={12} md={8}>
+                          <Grid item>
+                            <Typography
+                              variant="h4"
+                              color="inherit"
+                              style={{ overflowWrap: "break-word" }}
+                            >
+                              Goli supply{" "}
+                            </Typography>
+                            <Typography
+                              variant="h5"
+                              color="primary"
+                              style={{
+                                textShadow:
+                                  "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
+                              }}
+                            >
+                              {balance}
+                            </Typography>
+                          </Grid>
+                          <Grid item>
+                            <Typography
+                              variant="h4"
+                              color="inherit"
+                              style={{ overflowWrap: "break-word" }}
+                            >
+                              Distribution per second{" "}
+                            </Typography>
+                            <Typography
+                              variant="h5"
+                              color="primary"
+                              style={{
+                                textShadow:
+                                  "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
+                              }}
+                            >
+                              {gracePerSecond}
+                            </Typography>
+                          </Grid>
+                          <Grid item>
+                            <Typography
+                              variant="h4"
+                              color="inherit"
+                              style={{ overflowWrap: "break-word" }}
+                            >
+                              End of distribution{" "}
+                            </Typography>
+                            <Typography
+                              variant="h5"
+                              color="primary"
+                              style={{
+                                textShadow:
+                                  "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
+                              }}
+                            >
+                              {endTime}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                          <ReactSvgPieChart
+                            strokeWidth={0}
+                            data={data}
+                            startAngle={90}
+                            // If you need expand on hover (or touch) effect
+                            expandOnHover
+                            // If you need custom behavior when sector is hovered (or touched)
+                            onSectorHover={(d, i, e) => {
+                              if (d) {
+                                console.log("Data:", d.title);
+                              }
+                            }}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Paper>
+                  </Grid>
+
+                  <Grid item xs={12} md={4} lg={3}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        display: "flex",
+                        flexDirection: "column",
+                        height: 254,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Image src={Logo} alt="SVG logo image" />
+                      <Typography
+                        fontSize={13}
+                        color="inherit"
+                        letterSpacing={8}
+                      >
+                        Fountain Finance
+                      </Typography>
+                    </Paper>
+                  </Grid>
+
+                  {LP_Tokens &&
+                    LP_Tokens.map((val, index) => {
+                      return (
+                        <Grid item xs={12} md={4} lg={4} key={index}>
+                          <Paper
+                            sx={{
+                              p: 3,
+                              display: "flex",
+                              flexDirection: "column",
+                              width: "100%",
+                            }}
+                          >
+                            <Cards
+                              title={val.title}
+                              img={val.image}
+                              address={val.address}
+                              fountain={val.Fountain_address}
+                              id={index}
+                              stepNum={setStepNumber}
+                              openStepper={setOpenModal}
+                            />
+                          </Paper>
+                        </Grid>
+                      );
+                    })}
+                </Grid>
+              </Container>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
       <Modal
@@ -368,13 +382,19 @@ const Dashboard =()=>{
       >
         <Box sx={style}>
           <Stepper activeStep={stepNumber} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-      {stepNumber==3? <Button onClick={()=>setOpenModal(false)}><Typography color={"green"} fontSize="bold">Success</Typography></Button>:null}
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          {stepNumber == 3 ? (
+            <Button onClick={() => setOpenModal(false)}>
+              <Typography color={"green"} fontSize="bold">
+                Success
+              </Typography>
+            </Button>
+          ) : null}
         </Box>
       </Modal>
     </ThemeProvider>
