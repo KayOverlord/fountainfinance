@@ -17,6 +17,8 @@ import FuruLogo from '../icons/furuC.png';
 import Typewriter from 'typewriter-effect';
 import CanvasBackground from '../components/CanvasBackground'
 import { height } from '@mui/system';
+import Footer from '../components/Footer';
+
 
 const Home=({timeout=50})=>{
 const {connectWallet,connected}=useWeb3();
@@ -47,7 +49,7 @@ useEffect(() => {
         <CanvasBackground />
         <Grid
           container
-         
+         pt={15}
           style={{
             display: "flex",
             flexDirection:"column",
@@ -70,7 +72,7 @@ useEffect(() => {
 
         <Grid
           container
-          pt={1}
+          pt={10}
           spacing={2}
           style={{
             display: "flex",
@@ -79,7 +81,7 @@ useEffect(() => {
           }}
           
         >
-          <Grid item>
+          <Grid item >
             <Button
               variant="contained"
               color="primary"
@@ -88,39 +90,8 @@ useEffect(() => {
               CONNECT
             </Button>
           </Grid>
-          <Grid container style={{ 
-          backgroundColor:theme.palette.background.paper,
-          position: "fixed",
-          right:0,
-          left: 0,
-          bottom: 0,
-          width: "100%",
-          color: "white",
-          height:"15vh",
-          display:"flex",
-          flexDirection:"row",
-          justifyContent:"center",
-          alignItems:"center",
-          }}>
-            <Grid item>
-         <Typography fontSize={20} pr={1}>Trevi System design by:</Typography>
-         </Grid>
-          <Grid item xs={12} md={2}>
-         <Image src={FuruLogo} alt="SVG logo image" width={200} height={30} />
-         </Grid>
-         <Grid item xs={false}>
-         <Typography fontSize={20} pr={1} >Audited by:</Typography>
-         </Grid>
-          <Grid item xs={false} md={2}>
-         <Image src={ChainLogo} alt="SVG logo image" width={200} height={50} />
-         </Grid>
-         <Grid item xs={false} md={2}>
-         <Image src={PackLogo} alt="SVG logo image" width={200} height={50} />
-         </Grid>
-         <Grid item xs={false} md={2}>
-         <Typography fontSize={30} fontWeight={'bold'}>HashCloak</Typography>
-         </Grid>
-        </Grid>
+         <Footer/>
+
         </Grid>
 
       </main>

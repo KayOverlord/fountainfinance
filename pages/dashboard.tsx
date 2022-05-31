@@ -29,7 +29,9 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import CanvasBackground from '../components/CanvasBackground';
-
+import Footer from '../components/Footer';
+import CheckCircleTwoToneIcon from '@mui/icons-material/CheckCircleTwoTone';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const drawerWidth: number = 240;
 interface AppBarProps extends MuiAppBarProps {
@@ -137,6 +139,20 @@ const Dashboard =()=>{
     'Stake your tokens for rewards',
   ];
 
+
+  function QontoStepIcon(props:any) {
+    const { active, completed, className } = props;
+  
+    return (
+      <>
+        {completed ? (
+          <CheckCircleTwoToneIcon/>
+        ) : (
+          <CircularProgress color="success" size={30} />
+        )}
+      </>
+    );
+  }
   return (
     <ThemeProvider theme={theme}>
       <CanvasBackground/>
@@ -340,6 +356,7 @@ const Dashboard =()=>{
                   );
                 })}
             </Grid>
+            
           </Container>
         </Box>
       </Box>
@@ -353,7 +370,7 @@ const Dashboard =()=>{
           <Stepper activeStep={stepNumber} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+            <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
           </Step>
         ))}
       </Stepper>

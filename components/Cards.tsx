@@ -62,10 +62,10 @@ function Cards(props) {
         ethers.utils.parseEther(deposit)]
       ).then((results)=>{
         props.openStepper(true)
-        
+        props.stepNum(1);
         // console.log("deposit_results",results);
         results.wait().then(res=>{
-          props.stepNum(1);
+          
           console.log("approve_res",res);
           depositToken();
         })
@@ -85,9 +85,9 @@ function Cards(props) {
       "deposit",
       [ethers.utils.parseEther(deposit)]).then((results)=>{
        
-        
+        props.stepNum(2);
         results.wait().then(res=>{
-          props.stepNum(2);
+          
           console.log("deposit_res",res);
           stakingToken()
         })
@@ -136,8 +136,8 @@ function Cards(props) {
       
             <TextField
               variant="outlined" 
-              label="Deposit"
-              id="Deposit"
+              label="Stake amount"
+              id="Stake"
               size="small"
               value={deposit}
               onChange={handleChange}
@@ -145,11 +145,11 @@ function Cards(props) {
               helperText={depositErrorMessage}
             />
             <Button variant="contained" onClick={send_deposit} style={{ marginTop: 18,marginBottom: 15,width:"100%" }}>
-              Deposit your {props.title}
+              Stake your {props.title}
             </Button>
             <TextField
               variant="outlined" 
-              label="Withdraw"
+              label="Withdraw amount"
               id="Withdraw"
               size="small"
               value={withdraw}
@@ -171,7 +171,7 @@ function Cards(props) {
               helperText={props.WithdrawErrorMessage}
             /> */}
             <Button  variant="contained" style={{ marginTop: 15,marginBottom: 15,width:"100%" }}>
-              Withdraw your Rewards
+              Harvest your Rewards
             </Button>
           
           <Typography
