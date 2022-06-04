@@ -19,6 +19,7 @@ export const Web3Provider=({children})=>{
   const [web3Modal,setWeb3Modal]=useState(null);
   const [library,setLibrary]=useState(null);
   const [signer,setSigner]=useState(null);
+  const [walletBalance,setWalletBalance]=useState(null);
     
    
     useEffect(() => {
@@ -113,7 +114,8 @@ const connectWallet=async()=>{
     }).catch(err => {
       console.error("getAddress_Error",err);
     })
-
+    const balance = await signer.getBalance();
+    setWalletBalance(ethers.utils.formatEther(balance));
   } catch (error) {
     console.log("Could not get a wallet connection", error,provider);
   }
@@ -214,7 +216,8 @@ const values ={
     disconnectWallet,
     send_transaction,
     get_contract_data,
-    get_balance
+    get_balance,
+    walletBalance
 }
 return(
 <context.Provider value={values}>

@@ -225,7 +225,25 @@ const Dashboard =()=>{
                     flexDirection: "column",
                     minHeight: 340,
                   }}
-                ></Paper>
+                >
+                    <Typography
+            
+            style={{
+              textTransform: "none",
+              lineHeight: "normal",
+              color: "white",
+              marginTop: 8,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              textDecoration: "underline",
+            }}
+            variant={'h4'}
+            display="block"
+          >
+            Your Account Stats
+          </Typography>
+                </Paper>
               </Container>
             </Grid>
 
