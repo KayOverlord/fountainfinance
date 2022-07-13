@@ -11,9 +11,7 @@ import Button from "@mui/material/Button";
 import { useRouter } from "next/router";
 import { useWeb3 } from "../hooks/Web3Contaxt";
 import Logo from "../icons/image.svg";
-import ChainLogo from "../icons/chainS.png";
-import PackLogo from "../icons/packshi.png";
-import FuruLogo from "../icons/furuC.png";
+import MetaIcon from "../icons/metIcon";
 import Typewriter from "typewriter-effect";
 import CanvasBackground from "../components/CanvasBackground";
 import { height } from "@mui/system";
@@ -86,8 +84,9 @@ const Home = ({ timeout = 50 }) => {
               variant="contained"
               color="primary"
               onClick={() => connectWallet()}
+            
             >
-              CONNECT
+              CONNECT MetaMask
             </Button>
           </Grid>
           <Footer />
