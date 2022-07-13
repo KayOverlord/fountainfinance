@@ -45,16 +45,17 @@ function Cards(props) {
     setDeposit(e.target.value);
   }
   const send_deposit = () => {
-    if(walletBalance>1){
+    // if(walletBalance>1){
+    // }else{
+    //   setBalanceError("red")
+    // }
       setBalanceError("white")
     if(deposit.trim()!==null && parseFloat(deposit.trim())>0){
       setIsStaking(true)
       start_sending_deposit()
       
     }
-  }else{
-    setBalanceError("red")
-  }
+  
   }
 
   const start_sending_deposit=()=>{
@@ -188,7 +189,7 @@ function Cards(props) {
               textAlign: "center"
             }}
             display="block"
-          >Staking process in progress
+          >Staking in progress
           </Typography>
           </Stack>
             }

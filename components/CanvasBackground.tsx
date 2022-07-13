@@ -7,19 +7,19 @@ import { theme } from '../styles/Theme';
 const CanvasBackground=({timeout=50})=>{
 
 
-const canvas = useRef();
+const canvas = useRef()!!;
 useEffect(() => {
  
-  if(typeof window !== 'undefined'){
-  const context = canvas.current.getContext('2d');
+  if(typeof window !== 'undefined' ){
+  const context = canvas?.current?.getContext('2d');
 
   let width = window.innerWidth;
   let height = window.screen.height;
   const handleResize =()=>{
     width = window.innerWidth;
     height = window.innerHeight;
-    canvas.current.width = width;
-    canvas.current.height = height;
+    canvas?.current?.width = width;
+    canvas?.current?.height = height;
     context.fillStyle =  theme.palette.background.default;
   context.fillRect(0, 0, width, height);
   }
@@ -40,7 +40,7 @@ useEffect(() => {
       context.fillStyle = theme.palette.background.default;
       context.font = '15pt monospace';
 
-      yPositions.forEach((y, index) => {
+      yPositions.forEach((y:number, index) => {
           const text = String.fromCharCode(Math.random() * 128);
           const x = index * 20;
           context.fillText(text, x, y);

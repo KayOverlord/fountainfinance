@@ -1,42 +1,39 @@
-import React, { useEffect, useRef } from 'react';
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
+import React, { useEffect, useRef } from "react";
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import Grid from '@mui/material/Grid';
-import { theme } from '../styles/Theme';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { useRouter } from 'next/router'
-import { useWeb3 } from '../hooks/Web3Contaxt';
-import Logo from '../icons/image.svg';
-import ChainLogo from '../icons/chainS.png';
-import PackLogo from '../icons/packshi.png';
-import FuruLogo from '../icons/furuC.png';
-import Typewriter from 'typewriter-effect';
-import CanvasBackground from '../components/CanvasBackground'
-import { height } from '@mui/system';
-import Footer from '../components/Footer';
+import Grid from "@mui/material/Grid";
+import { theme } from "../styles/Theme";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import { useRouter } from "next/router";
+import { useWeb3 } from "../hooks/Web3Contaxt";
+import Logo from "../icons/image.svg";
+import ChainLogo from "../icons/chainS.png";
+import PackLogo from "../icons/packshi.png";
+import FuruLogo from "../icons/furuC.png";
+import Typewriter from "typewriter-effect";
+import CanvasBackground from "../components/CanvasBackground";
+import { height } from "@mui/system";
+import Footer from "../components/Footer";
 
+const Home = ({ timeout = 50 }) => {
+  const { connectWallet, connected } = useWeb3();
+  const router = useRouter();
 
-const Home=({timeout=50})=>{
-const {connectWallet,connected}=useWeb3();
-const router = useRouter();
-
-useEffect(() => {
-  
-  if(connected==true){
-    router.push("/dashboard")
-  }
-}, [!connected]);
-
+  useEffect(() => {
+    if (connected == true) {
+      router.push("/dashboard");
+    }
+  }, [!connected]);
 
   return (
     <div
       className={styles.container}
       style={{
-        backgroundColor:"transparent",
+        backgroundColor: "transparent",
       }}
     >
       <Head>
@@ -49,25 +46,29 @@ useEffect(() => {
         <CanvasBackground />
         <Grid
           container
-         pt={15}
+          pt={15}
           style={{
             display: "flex",
-            flexDirection:"column",
+            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
           }}
-          
         >
-        <Image src={Logo} alt="SVG logo image" width={460} height={250} />
-        <div className={styles.title}>
-          <Typewriter
-            options={{
-              strings: ["Hey you...","Welcome to Fountain Finance", "A Goli product","Connect now...."],
-              autoStart: true,
-              loop: true,
-            }}
-          />
-        </div>
+          <Image src={Logo} alt="SVG logo image" width={460} height={250} />
+          <div className={styles.title}>
+            <Typewriter
+              options={{
+                strings: [
+                  "Hey you...",
+                  "Welcome to Fountain Finance",
+                  "A Goli farming platform",
+                  "Connect your MetaMask to start",
+                ],
+                autoStart: true,
+                loop: true,
+              }}
+            />
+          </div>
         </Grid>
 
         <Grid
@@ -79,9 +80,8 @@ useEffect(() => {
             justifyContent: "center",
             alignItems: "center",
           }}
-          
         >
-          <Grid item >
+          <Grid item>
             <Button
               variant="contained"
               color="primary"
@@ -90,12 +90,10 @@ useEffect(() => {
               CONNECT
             </Button>
           </Grid>
-         <Footer/>
-
+          <Footer />
         </Grid>
-
       </main>
     </div>
   );
-}
-export default Home
+};
+export default Home;

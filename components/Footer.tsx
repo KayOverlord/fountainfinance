@@ -1,52 +1,96 @@
-import React from 'react';
-import Image from 'next/image';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import { theme } from '../styles/Theme';
-import FuruLogo from '../icons/furuC.png';
-import ChainLogo from '../icons/chainS.png';
-import PackLogo from '../icons/packshi.png';
-import Box from '@mui/material/Box';
+import React from "react";
+import Image from "next/image";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import { theme } from "../styles/Theme";
+import FuruLogo from "../icons/furuC.png";
+import ChainLogo from "../icons/chainS.png";
+import PackLogo from "../icons/packshi.png";
+import GoliLogo from "../icons/logo.svg";
+import Box from "@mui/material/Box";
 
 function Footer() {
   return (
-    <Box display={{ xs: "none", sm: "block" }}> 
-        <Grid container style={{ 
-        backgroundColor:theme.palette.background.paper,
-        position: "fixed",
-        right:0,
-        left: 0,
-        bottom: 0,
-        width: "100%",
-        color: "white",
-        height:"15vh",
-        display:"flex",
-        flexDirection:"row",
-        justifyContent:"center",
-        alignItems:"center",
-        }}>
-          <Grid item>
-       <Typography fontSize={20} pr={1}>Trevi System design by:</Typography>
-       </Grid>
-        <Grid item xs={12} md={2}>
-       <Image src={FuruLogo} alt="SVG logo image" width={200} height={30} />
-       </Grid>
-       <Grid item xs={false}>
-       <Typography fontSize={20} pr={1} >Audited by:</Typography>
-       </Grid>
-        <Grid item xs={false} md={2}>
-       <Image src={ChainLogo} alt="SVG logo image" width={200} height={50} />
-       </Grid>
-       <Grid item xs={false} md={2}>
-       <Image src={PackLogo} alt="SVG logo image" width={200} height={50} />
-       </Grid>
-       <Grid item xs={false} md={2}>
-       <Typography fontSize={30} fontWeight={'bold'}>HashCloak</Typography>
-       </Grid>
+    <Box display={{ xs: "none", sm: "block" }}>
+      <Grid
+        container
+        style={{
+          backgroundColor: theme.palette.background.paper,
+          position: "fixed",
+          right: 0,
+          left: 0,
+          bottom: 0,
+          width: "100%",
+          color: "white",
+          minHeight: "15vh",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Grid item lg={3} md={3} xs={12}>
+          <Typography fontSize={20} pr={1}>
+            Developed by:
+          </Typography>
+          <Grid
+            item
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <Image src={GoliLogo} alt="SVG logo image" width={50} height={43} />
+            <Typography fontSize={30} fontWeight={"light"}>
+              Goli
+            </Typography>
+          </Grid>
+        </Grid>
 
+        <Grid item lg={3} md={3} xs={12}>
+          <Typography fontSize={20} pr={1}>
+            Trevi System design by:
+          </Typography>
+          <Image src={FuruLogo} alt="SVG logo image" width={200} height={25} />
+        </Grid>
+
+        <Grid item lg={4} md={4} xs={12}>
+          <Typography fontSize={20} pr={1}>
+            System Audited by:
+          </Typography>
+          <Grid
+            item
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <Image
+                src={ChainLogo}
+                alt="SVG logo image"
+                width={195}
+                height={50}
+              />
+            </div>
+            <div style={{ paddingLeft: 20 }}>
+              <Image
+                src={PackLogo}
+                alt="SVG logo image"
+                width={200}
+                height={50}
+              />
+            </div>
+            <Typography fontSize={30} fontWeight={"bold"} pl={3}>
+              HashCloak
+            </Typography>
+          </Grid>
+        </Grid>
       </Grid>
-      </Box>
-  )
+    </Box>
+  );
 }
 
-export default Footer
+export default Footer;
