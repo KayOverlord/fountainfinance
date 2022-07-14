@@ -140,7 +140,7 @@ const Dashboard =()=>{
   ];
 
 
-  function QontoStepIcon(props:any) {
+  function ontoStepIcon(props:any) {
     const { active, completed, className } = props;
   
     return (
@@ -402,7 +402,7 @@ const Dashboard =()=>{
           <Stepper activeStep={stepNumber} alternativeLabel>
             {steps.map((label) => (
               <Step key={label}>
-                <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
+                <StepLabel StepIconComponent={ontoStepIcon}>{label}</StepLabel>
               </Step>
             ))}
           </Stepper>

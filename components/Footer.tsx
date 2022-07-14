@@ -30,7 +30,15 @@ function Footer() {
         }}
       >
         <Grid item lg={3} md={3} xs={12}>
-          <Typography fontSize={20} pr={1}>
+          <Typography
+            fontSize={20}
+            pr={1}
+            color="primary"
+            style={{
+              textShadow:
+                "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
+            }}
+          >
             Developed by:
           </Typography>
           <Grid
@@ -49,14 +57,30 @@ function Footer() {
         </Grid>
 
         <Grid item lg={3} md={3} xs={12}>
-          <Typography fontSize={20} pr={1}>
+          <Typography
+            fontSize={20}
+            pr={1}
+            color="primary"
+            style={{
+              textShadow:
+                "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
+            }}
+          >
             Trevi System design by:
           </Typography>
           <Image src={FuruLogo} alt="SVG logo image" width={200} height={25} />
         </Grid>
 
         <Grid item lg={4} md={4} xs={12}>
-          <Typography fontSize={20} pr={1}>
+          <Typography
+            fontSize={20}
+            pr={1}
+            color="primary"
+            style={{
+              textShadow:
+                "1px 1px 2px blue, 0 0 1em #14506e, 0 0 0.1em #14506e",
+            }}
+          >
             System Audited by:
           </Typography>
           <Grid

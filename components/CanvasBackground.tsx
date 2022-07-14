@@ -3,9 +3,9 @@ import styles from "../styles/Home.module.css";
 import { theme } from "../styles/Theme";
 
 const CanvasBackground = ({ timeout = 50 }) => {
-  const canvas = useRef()!!;
+  const canvas = useRef(null);
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && canvas !== null) {
       const context = canvas.current.getContext("2d");
 
       let width = window.innerWidth;

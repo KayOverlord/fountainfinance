@@ -27,8 +27,6 @@ function Cards(props) {
   const [isStaking,setIsStaking]= useState(false);
   const [errorMsg,setErrorMsg] = useState("");
   const [balanceError,setBalanceError] = useState("white");
-
-
   const fountainAddress =LP_Tokens[props.id].Fountain_address;
   const TokenAddress = LP_Tokens[props.id].address;
   const TokenAbi = LP_Tokens[props.id].Abi;

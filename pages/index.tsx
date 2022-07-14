@@ -8,18 +8,20 @@ import Grid from "@mui/material/Grid";
 import { theme } from "../styles/Theme";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { useRouter } from "next/router";
 import { useWeb3 } from "../hooks/Web3Contaxt";
 import Logo from "../icons/image.svg";
-import MetaIcon from "../icons/metIcon";
+import MetaIcon from "../icons/metamask-fox.png";
 import Typewriter from "typewriter-effect";
 import CanvasBackground from "../components/CanvasBackground";
-import { height } from "@mui/system";
 import Footer from "../components/Footer";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Home = ({ timeout = 50 }) => {
   const { connectWallet, connected } = useWeb3();
   const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
     if (connected == true) {
@@ -50,6 +52,7 @@ const Home = ({ timeout = 50 }) => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            width: "100vw",
           }}
         >
           <Image src={Logo} alt="SVG logo image" width={460} height={250} />
@@ -80,14 +83,27 @@ const Home = ({ timeout = 50 }) => {
           }}
         >
           <Grid item>
-            <Button
+            <LoadingButton
               variant="contained"
               color="primary"
-              onClick={() => connectWallet()}
-            
+              onClick={() => {
+                connectWallet();
+                setLoading(true);
+              }}
+              endIcon={
+                <Image
+                  src={MetaIcon}
+                  alt="SVG logo image"
+                  width={30}
+                  height={30}
+                />
+              }
+              loading={loading}
+              loadingPosition="end"
+              loadingIndicator={<CircularProgress color="success" />}
             >
               CONNECT MetaMask
-            </Button>
+            </LoadingButton>
           </Grid>
           <Footer />
         </Grid>
