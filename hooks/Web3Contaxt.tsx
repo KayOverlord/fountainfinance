@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect,useState } from "react"
-import Web3 from "web3";
 import Web3Modal from "web3modal";
+import { networkMap } from "../util/networks";
 import {providerOptions} from "../util/Web3Provider"
+import {ethers} from "ethers";
 
 
 
@@ -12,17 +13,17 @@ return useContext(context)
 }
 
 export const Web3Provider=({children})=>{
-  const [address,setAddress]=useState<string[]>();
-  const [connected,setConnected]=useState(true);
+  const [address,setAddress]=useState("");
+  const [connected,setConnected]=useState(false);
   const [provider,setProvider]=useState(null);
   const [web3Modal,setWeb3Modal]=useState(null);
-  
-  
+  const [library,setLibrary]=useState(null);
+  const [signer,setSigner]=useState(null);
+  const [walletBalance,setWalletBalance]=useState(null);
     
-      // Chosen wallet provider given by the dialog window
-      let web3;
-
+   
     useEffect(() => {
+      
         const sub =async()=>{
          var web3Modal = new Web3Modal({
             network: "mainnet", // optional
@@ -37,104 +38,187 @@ export const Web3Provider=({children})=>{
        }, []);
 
 
-       useEffect(() => {
-        if(window.ethereum) {
-          window.ethereum.on('disconnect', () => {
+       useEffect(()=>{
+
+        const handleAccountsChanged=(accounts)=>{
+          if(accounts.length >0){
+            setConnected(true)
+            setAddress(accounts)
+          }else{
             setConnected(false)
-            console.log("Websocket Provider connection disconnected!");
-          })
+          }
         }
-      },[])
 
-const connectWallet=async()=>{
-  if(web3Modal){
-  web3Modal.clearCachedProvider();
-  }
+        const handleChainChanged=(chainId)=>{
+          
+           if(chainId!==networkMap.POLYGON_MAINNET.chainId){
+            handleDisconnect();
+           }
+        }
+        const handleConnect=()=>{
+          switchNetwork()
+          setConnected(true)
+          console.log("Websocket Provider connection established!");
+
+        }
+
+        const handleDisconnect=()=>{
+          setConnected(false)
+            console.log("Websocket Provider connection disconnected!");
+        }
+
+        if(provider?.on){
+
+        
+          provider.on("accountsChanged",handleAccountsChanged);
+        
+          // Subscribe to chainId change
+          provider.on("chainChanged",handleChainChanged);
+        
+          // Subscribe to provider connection
+          provider.on('connect',handleConnect);
+        
+          // Subscribe to provider disconnection
+          provider.on("disconnect",handleDisconnect);
+        }
+        return () => {
+          if (provider?.removeListener) {
+            provider.removeListener('accountsChanged', handleAccountsChanged)
+            provider.removeListener('chainChanged', handleChainChanged)
+            provider.removeListener('connect', handleConnect)
+            provider.removeListener('disconnect', handleDisconnect)
+          }
+        }
+       },[provider])
+     
+
+const connectWallet=async(onSuccess,onError)=>{
+ const chain =ethers.utils.hexlify(ethers.utils.toUtf8Bytes(window.ethereum.networkVersion));
+
+ if(chain!==networkMap.POLYGON_MAINNET.chainId){
+  switchNetwork()
+ }
   try {
-  const provider = await web3Modal.connect();
-   setProvider(provider)
-   web3 = new Web3(provider);
-   fatchAccountData();
+    const prov = await web3Modal.connect();
+    setProvider(prov);
+
+    const library = new ethers.providers.Web3Provider(prov);
+    setLibrary(library)
+
+    const signer = library.getSigner();
+    setSigner(signer);
+
+    signer.getAddress().then(result => {
+      setAddress(result);
+      setConnected(true)
+    }).catch(error => {
+      onError?.(error);
+    })
+    const balance = await signer.getBalance();
+    setWalletBalance(ethers.utils.formatEther(balance));
+    onSuccess("Connection success")
   } catch (error) {
-    console.log("Could not get a wallet connection", error,provider);
-    return;
+    onError?.(error);
   }
 
-if(provider){
-  provider.on("accountsChanged", (accounts) => {
-    if(accounts.length >0){
-      setConnected(true)
-      setAddress(accounts)
-    }else{
-      setConnected(false)
-    }
-  });
 
-  // Subscribe to chainId change
-  provider.on("chainChanged", (chainId) => {
-    fatchAccountData()
-    console.log("chain ID", chainId);
-  });
-
-  // Subscribe to provider connection
-  provider.on('connect', (info) => {
-    fatchAccountData()
-    setConnected(true)
-    console.log("Websocket Provider connection established!");
-  });
-
-  // Subscribe to provider disconnection
-  provider.on("disconnect", (info) => {
-    setConnected(false)
-    console.log("Websocket Provider connection disconnected!");
-  });
 }
 
 
-    return;  
-}
-
-const fatchAccountData=()=>{
-  web3.eth.net.isListening(function (error, result) {
-    if (error) {
-      console.error(error);
-    } else {
-      setConnected(result);
-    }
-  });
-    web3.eth.getAccounts().then(async (addr:string[]) => {
-      return setAddress(addr);
-                
-    });
-   
-}
 
 const disconnectWallet =async()=>{
-   // TODO: Which providers have close method?
-  if(provider!==undefined) {
+  await web3Modal.clearCachedProvider();
 
-    // If the cached provider is not cleared,
-    // WalletConnect will default to the existing session
-    // and does not allow to re-scan the QR code with a new wallet.
-    // Depending on your use case you may want or want not his behavir.
-    await web3Modal.clearCachedProvider();
-    setProvider(null);
-    setConnected(false);
-    
-  }else{
-    setConnected(false)
-  }
+  setConnected(false);
+  setProvider(null);
+  
  return;
 }
 
+const switchNetwork = async () => {
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: networkMap.POLYGON_MAINNET.chainId }], // chainId must be in hexadecimal numbers
+    });
+  } catch (switchError) {
+    // This error code indicates that the chain has not been added to MetaMask.
+    if (switchError.code === 4902) {
+      try {
+        await window.ethereum.request({
+           method: 'wallet_addEthereumChain',
+           params: [networkMap.POLYGON_MAINNET],
+         });
+       } catch (addError) {
+         console.error("addError", addError);
+       }
+    }
+  }
+};
+/*
+* This is the send_transaction function
+* @param myContractAddress This is the bar parameter
+* @returns returns a string version of bar
+*/
+const send_transaction =async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
+var myContract = new ethers.Contract(ContractAddress,Abi,signer);
+
+//const feeData = await provider.getFeeData();
+
+
+if(params?.length){ 
+  return await myContract[methodName](...params).then(callback);
+}
+}
+/**
+* This is the get_contract_data function
+* @param Abi This is the bar parameter
+* @param ContractAddress This is the bar parameter
+* @param methodName This is the bar parameter
+* @param params This is the bar parameter
+* @returns returns a string version of bar
+*/
+const get_contract_data=async(Abi:[],ContractAddress:string,methodName:string,params:[])=>{
+  var MyContract = new ethers.Contract(ContractAddress,Abi,library);
+
+  if(params?.length){ 
+    return await MyContract[methodName](...params).then(callback);
+  }else{
+    return await MyContract[methodName]().then(callback);
+  }
+}
+
+const get_balance=async(Abi:[],token_contract:string,contract:string)=>{
+  var MyContract = new ethers.Contract(token_contract,Abi,library);
+  return await MyContract.balanceOf(contract).then(callback);
+  
+}
+
+const callback = async(result, error,receipt) => {
+  if (result) {
+    
+    return result;
+  }
+
+  if (error) {
+    return error;
+  }
+
+  return "0";
+};
+
+
 const values ={
     web3Modal,
-    web3,
     provider,
     address,
     connected,
     connectWallet,
-    disconnectWallet
+    disconnectWallet,
+    send_transaction,
+    get_contract_data,
+    get_balance,
+    walletBalance
 }
 return(
 <context.Provider value={values}>

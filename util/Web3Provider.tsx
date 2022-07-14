@@ -2,12 +2,12 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 export const providerOptions = {
   
-    walletconnect: {
-      package: WalletConnectProvider, // required
-      options: {
-        infuraId:process.env.NEXT_PUBLIC_INFURA_ID // required
-      }
-    },
+    // walletconnect: {
+    //   package: WalletConnectProvider, // required
+    //   options: {
+    //     infuraId:process.env.NEXT_PUBLIC_INFURA_ID // required
+    //   }
+    // },
     // fortmatic: {
     //   package: Fortmatic, // required
     //   options: {
