@@ -1,37 +1,37 @@
-import React,{ useEffect, useState } from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import MenuIcon from '@mui/icons-material/Menu';
-import { theme } from '../styles/Theme';
-import Button from '@mui/material/Button';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { useWeb3 } from '../hooks/Web3Contaxt';
-import { useRouter } from 'next/router';
-import Cards from '../components/Cards';
-import { LP_Tokens,contracts_address } from '../util/tokens&address';
-import Fountain from '../util/Abi/Fountain.json'
-import Angel from '../util/Abi/Angel.json';
-import styles from '../styles/Home.module.css';
-import {ethers} from "ethers";
+import React, { useEffect, useState } from "react";
+import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import MenuIcon from "@mui/icons-material/Menu";
+import { theme } from "../styles/Theme";
+import Button from "@mui/material/Button";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import { useWeb3 } from "../hooks/Web3Contaxt";
+import { useRouter } from "next/router";
+import Cards from "../components/Cards";
+import { LP_Tokens, contracts_address } from "../util/tokens&address";
+import Fountain from "../util/Abi/Fountain.json";
+import Angel from "../util/Abi/Angel.json";
+import styles from "../styles/Home.module.css";
+import { ethers } from "ethers";
 import ReactSvgPieChart from "react-svg-piechart";
-import Image from 'next/image';
-import Logo from '../icons/image.svg';
-import Modal from '@mui/material/Modal';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import CanvasBackground from '../components/CanvasBackground';
-import Footer from '../components/Footer';
-import CheckCircleTwoToneIcon from '@mui/icons-material/CheckCircleTwoTone';
-import CircularProgress from '@mui/material/CircularProgress';
+import Image from "next/image";
+import Logo from "../icons/image.svg";
+import Modal from "@mui/material/Modal";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import CanvasBackground from "../components/CanvasBackground";
+import Footer from "../components/Footer";
+import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const drawerWidth: number = 240;
 interface AppBarProps extends MuiAppBarProps {
@@ -39,114 +39,131 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
+  transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
 }));
 
-
-
-const Dashboard =()=>{
+const Dashboard = () => {
   const [open, setOpen] = useState(true);
-  const [openModal,setOpenModal]= useState(false);
-  const [stepNumber,setStepNumber]= useState(1);
-  const {address,connected,disconnectWallet,get_contract_data, get_balance}=useWeb3();
+  const [openModal, setOpenModal] = useState(false);
+  const [stepNumber, setStepNumber] = useState(1);
+  const {
+    address,
+    connected,
+    disconnectWallet,
+    get_contract_data,
+    get_balance,
+  } = useWeb3();
   const router = useRouter();
 
-  const [gracePerSecond,setGracePerSecond] =useState("0");
-  const [balance,setBalance] = useState("");
-  const [endTime,setEndTime] = useState("");
-  const [userInfo,setUserInfo] = useState({amount:0,rewards:0});
+  const [gracePerSecond, setGracePerSecond] = useState("0");
+  const [balance, setBalance] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [userInfo, setUserInfo] = useState({ amount: 0, rewards: 0 });
 
-  const addCommas = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const removeNonNumeric = num => num.toString().replace(/[^0-9]/g, "");
+  const addCommas = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const removeNonNumeric = (num) => num.toString().replace(/[^0-9]/g, "");
   const data = [
-    {title: "Amount", value:userInfo.amount, color:theme.palette.primary.main},
-    {title: "Rewards", value:userInfo.rewards, color:theme.palette.secondary.main}
-  ]
+    {
+      title: "Amount",
+      value: userInfo.amount,
+      color: theme.palette.primary.main,
+    },
+    {
+      title: "Rewards",
+      value: userInfo.rewards,
+      color: theme.palette.secondary.main,
+    },
+  ];
   const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
     p: 4,
   };
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () =>{ setOpen(false)}
-  
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
-    if(connected==false){
+    if (connected == false) {
       router.push("/");
     }
-  }, [!connected]);
+  }, [connected]);
 
   useEffect(() => {
-    get_contract_data(Angel,contracts_address.Angel,"gracePerSecond")
-    .then(data=>{
-      setGracePerSecond(ethers.utils.formatEther(data))
-    }
-      );
-      
-      get_contract_data(Angel,contracts_address.Angel,"userInfo",["0",address])
-    .then(data=>{
-      let amount = parseInt(data.amount);
-      let rewards = parseInt(data.rewardDebt);
-    
-      setUserInfo({amount,rewards})
-    }
+    if (connected !== false) {
+      get_contract_data(Angel, contracts_address.Angel, "gracePerSecond").then(
+        (data) => {
+          setGracePerSecond(ethers.utils.formatEther(data));
+        }
       );
 
-      get_balance(Fountain,contracts_address.RewardToken,contracts_address.Angel).then(data=>{
-        setBalance(addCommas(ethers.utils.formatEther(data)))
+      get_contract_data(Angel, contracts_address.Angel, "userInfo", [
+        "0",
+        address,
+      ]).then((data) => {
+        let amount = parseInt(data.amount);
+        let rewards = parseInt(data.rewardDebt);
+
+        setUserInfo({ amount, rewards });
       });
 
-      get_contract_data(Angel,contracts_address.Angel,"endTime")
-    .then(data=>{
-      let date = new Date(data* 1000).toLocaleString();
-      setEndTime(date)
-    }
+      get_balance(
+        Fountain,
+        contracts_address.RewardToken,
+        contracts_address.Angel
+      ).then((data) => {
+        setBalance(addCommas(ethers.utils.formatEther(data)));
+      });
+
+      get_contract_data(Angel, contracts_address.Angel, "endTime").then(
+        (data) => {
+          let date = new Date(data * 1000).toLocaleString();
+          setEndTime(date);
+        }
       );
-     
-        
-     
-  }, [])
-  
+    }
+  }, [connected]);
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   const steps = [
-    'Approve the transaction',
-    'Deposit your tokens',
-    'Stake your tokens for rewards',
+    "Approve the transaction",
+    "Deposit your tokens",
+    "Stake your tokens for rewards",
   ];
 
-
-  function ontoStepIcon(props:any) {
+  function ontoStepIcon(props: any) {
     const { active, completed, className } = props;
-  
+
     return (
       <>
         {completed ? (
-          <CheckCircleTwoToneIcon/>
+          <CheckCircleTwoToneIcon />
         ) : (
           <CircularProgress color="success" size={30} />
         )}
@@ -226,23 +243,22 @@ const Dashboard =()=>{
                     minHeight: 340,
                   }}
                 >
-                    <Typography
-            
-            style={{
-              textTransform: "none",
-              lineHeight: "normal",
-              color: "white",
-              marginTop: 8,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              textDecoration: "underline",
-            }}
-            variant={'h4'}
-            display="block"
-          >
-            Your Account Stats
-          </Typography>
+                  <Typography
+                    style={{
+                      textTransform: "none",
+                      lineHeight: "normal",
+                      color: "white",
+                      marginTop: 8,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textDecoration: "underline",
+                    }}
+                    variant={"h4"}
+                    display="block"
+                  >
+                    Your Account Stats
+                  </Typography>
                 </Paper>
               </Container>
             </Grid>
@@ -417,6 +433,6 @@ const Dashboard =()=>{
       </Modal>
     </ThemeProvider>
   );
-}
+};
 
-export default Dashboard
+export default Dashboard;
