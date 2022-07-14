@@ -92,7 +92,7 @@ export const Web3Provider=({children})=>{
        },[provider])
      
 
-const connectWallet=async()=>{
+const connectWallet=async(onSuccess,onError)=>{
  const chain =ethers.utils.hexlify(ethers.utils.toUtf8Bytes(window.ethereum.networkVersion));
 
  if(chain!==networkMap.POLYGON_MAINNET.chainId){
@@ -111,13 +111,14 @@ const connectWallet=async()=>{
     signer.getAddress().then(result => {
       setAddress(result);
       setConnected(true)
-    }).catch(err => {
-      console.error("getAddress_Error",err);
+    }).catch(error => {
+      onError?.(error);
     })
     const balance = await signer.getBalance();
     setWalletBalance(ethers.utils.formatEther(balance));
+    onSuccess("Connection success")
   } catch (error) {
-    console.log("Could not get a wallet connection", error,provider);
+    onError?.(error);
   }
 
 
