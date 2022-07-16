@@ -253,7 +253,18 @@ function Cards(props) {
                   Withdraw your {props.title}
                 </Button>
               ) : (
-                <CircularProgress color="success" />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    paddingTop: 4,
+                  }}
+                >
+                  <CircularProgress color="success" />
+                </div>
               )}
 
               {harvestLoading == false ? (
@@ -265,7 +276,18 @@ function Cards(props) {
                   Harvest your Rewards
                 </Button>
               ) : (
-                <CircularProgress color="success" />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    paddingTop: 4,
+                  }}
+                >
+                  <CircularProgress color="success" />
+                </div>
               )}
             </>
           ) : (
@@ -279,7 +301,18 @@ function Cards(props) {
               spacing={2}
               direction="column"
             >
-              <CircularProgress color="success" />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  paddingTop: 4,
+                }}
+              >
+                <CircularProgress color="success" />
+              </div>
               <Typography
                 variant="h6"
                 color="primary"
