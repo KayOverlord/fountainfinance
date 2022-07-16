@@ -74,8 +74,7 @@ const Dashboard = () => {
   const [endTime, setEndTime] = useState("");
   const [userRewards, setUserRewards] = useState(0);
   const [totalRewards, setTotalRewards] = useState(0);
-  const [stakes, setStakes] = useState([])
-
+  const [stakes, setStakes] = useState([]);
 
   const addCommas = (num) =>
     num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -139,7 +138,7 @@ const Dashboard = () => {
           setEndTime(date);
         }
       );
-      get_user_investments()
+      get_user_investments();
     }
   }, [connected]);
 
@@ -195,7 +194,11 @@ const Dashboard = () => {
         address,
       ]).then((data) => {
         let amount = addCommas(ethers.utils.formatEther(data.amount));
-        stakes.push({ amount: amount, image: element.image });
+        stakes.push({
+          amount: amount,
+          image: element.image,
+          title: element.title,
+        });
       });
     });
   };
@@ -287,22 +290,33 @@ const Dashboard = () => {
                     variant={"h4"}
                     display="block"
                   >
-                    Your Account Stats
+                    Your Account Stakes
                   </Typography>
-                  {stakes.map((value, index) => {
-
-                    return (
-                      <Grid item key={index}>
-                        <Image
-                          src={value.image}
-                          alt="Picture of the token"
-                          width={30}
-                          height={25}
-                        />
-                        <Typography>{value.amount}</Typography>
-                      </Grid>
-                    )
-                  })}
+                  {stakes &&
+                    stakes.map((value, index) => {
+                      return value.amount > 0 ? (
+                        <Grid
+                          item
+                          key={index}
+                          mt={2}
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Image
+                            src={value.image}
+                            alt="Picture of the token"
+                            width={45}
+                            height={45}
+                          />
+                          <Typography pl={2}>{value.title} stake:</Typography>
+                          <Typography pl={1}>{value.amount}</Typography>
+                        </Grid>
+                      ) : null;
+                    })}
                 </Paper>
               </Container>
             </Grid>
@@ -382,7 +396,7 @@ const Dashboard = () => {
                         </Grid>
                         <Grid item xs={12} md={4}>
                           <ReactSvgPieChart
-                            strokeWidth={0}
+                            strokeWidth={0.1}
                             data={data}
                             startAngle={90}
                             // If you need expand on hover (or touch) effect
