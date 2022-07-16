@@ -264,7 +264,7 @@ function Cards(props) {
               {harvestLoading == false ? (
                 <Button
                   variant="contained"
-                  onClick={handleBackdropOpenToggle}
+                  onClick={Harvest}
                   style={{ marginTop: 15, marginBottom: 15, width: "100%" }}
                 >
                   Harvest your Rewards
