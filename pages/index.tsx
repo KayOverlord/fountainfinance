@@ -1,13 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import Web3Modal from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
 import Grid from "@mui/material/Grid";
-import { theme } from "../styles/Theme";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useRouter } from "next/router";
 import { useWeb3 } from "../hooks/Web3Contaxt";
@@ -17,6 +12,7 @@ import Typewriter from "typewriter-effect";
 import CanvasBackground from "../components/CanvasBackground";
 import Footer from "../components/Footer";
 import CircularProgress from "@mui/material/CircularProgress";
+import Button from "@mui/material/Button";
 
 const Home = ({ timeout = 50 }) => {
   const { connectWallet, connected } = useWeb3();
@@ -95,26 +91,27 @@ const Home = ({ timeout = 50 }) => {
           }}
         >
           <Grid item>
-            <LoadingButton
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                startConnecting();
-              }}
-              endIcon={
-                <Image
-                  src={MetaIcon}
-                  alt="SVG logo image"
-                  width={30}
-                  height={30}
-                />
-              }
-              loading={loading}
-              loadingPosition="end"
-              loadingIndicator={<CircularProgress color="success" />}
-            >
-              CONNECT MetaMask
-            </LoadingButton>
+            {loading == false ? (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  startConnecting();
+                }}
+                endIcon={
+                  <Image
+                    src={MetaIcon}
+                    alt="SVG logo image"
+                    width={30}
+                    height={30}
+                  />
+                }
+              >
+                CONNECT MetaMask
+              </Button>
+            ) : (
+              <CircularProgress color="info" />
+            )}
           </Grid>
           <Footer />
         </Grid>

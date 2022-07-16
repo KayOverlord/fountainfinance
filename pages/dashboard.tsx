@@ -72,21 +72,22 @@ const Dashboard = () => {
   const [gracePerSecond, setGracePerSecond] = useState("0");
   const [balance, setBalance] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [userInfo, setUserInfo] = useState({ amount: 0, rewards: 0 });
+  const [userRewards, setUserRewards] = useState(0);
+  const [totalRewards, setTotalRewards] = useState(0);
 
   const addCommas = (num) =>
     num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeNonNumeric = (num) => num.toString().replace(/[^0-9]/g, "");
   const data = [
     {
-      title: "Amount",
-      value: userInfo.amount,
-      color: theme.palette.primary.main,
+      title: "Your Rewards: " + addCommas(userRewards),
+      value: userRewards,
+      color: theme.palette.secondary.main,
     },
     {
-      title: "Rewards",
-      value: userInfo.rewards,
-      color: theme.palette.secondary.main,
+      title: "Total Rewards: " + addCommas(totalRewards),
+      value: totalRewards,
+      color: theme.palette.primary.main,
     },
   ];
   const style = {
@@ -119,16 +120,7 @@ const Dashboard = () => {
           setGracePerSecond(ethers.utils.formatEther(data));
         }
       );
-
-      get_contract_data(Angel, contracts_address.Angel, "userInfo", [
-        "0",
-        address,
-      ]).then((data) => {
-        let amount = parseInt(data.amount);
-        let rewards = parseInt(data.rewardDebt);
-
-        setUserInfo({ amount, rewards });
-      });
+      get_userInfo();
 
       get_balance(
         Fountain,
@@ -136,6 +128,7 @@ const Dashboard = () => {
         contracts_address.Angel
       ).then((data) => {
         setBalance(addCommas(ethers.utils.formatEther(data)));
+        setTotalRewards(parseInt(ethers.utils.formatEther(data)));
       });
 
       get_contract_data(Angel, contracts_address.Angel, "endTime").then(
@@ -157,7 +150,7 @@ const Dashboard = () => {
     "Stake your tokens for rewards",
   ];
 
-  function ontoStepIcon(props: any) {
+  const ontoStepIcon = (props: any) => {
     const { active, completed, className } = props;
 
     return (
@@ -169,7 +162,39 @@ const Dashboard = () => {
         )}
       </>
     );
-  }
+  };
+
+  const get_userInfo = async () => {
+    let amount = 0;
+
+    try {
+      for (let index = 0; index < LP_Tokens.length; index++) {
+        const element = LP_Tokens[index];
+
+        get_contract_data(Angel, contracts_address.Angel, "pendingGrace", [
+          element.position,
+          address,
+        ]).then((data) => {
+          amount = amount + parseInt(ethers.utils.formatEther(data));
+
+          setUserRewards(amount);
+        });
+      }
+    } catch (e) {
+      //
+    }
+  };
+
+  const get_user_investments = () => {
+    LP_Tokens.forEach((element) => {
+      get_contract_data(Angel, contracts_address.Angel, "userInfo", [
+        element.position,
+        address,
+      ]).then((data) => {
+        let amount = addCommas(ethers.utils.formatEther(data.amount));
+      });
+    });
+  };
   return (
     <ThemeProvider theme={theme}>
       <CanvasBackground />

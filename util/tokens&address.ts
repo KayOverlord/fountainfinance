@@ -12,7 +12,8 @@ export const LP_Tokens =[{
     symbol:"FTN-COMBO",
     image:"https://polygonscan.com/token/images/furucombo_32.png",
     Abi:ComboAbi,
-    points:19
+    points:19,
+    position:1,
 
 },
 {
@@ -22,7 +23,8 @@ export const LP_Tokens =[{
     symbol:"FTN-BNB",
     image:"https://polygonscan.com/token/images/bnb_28_2.png",
     Abi:BnBAbi,
-    points:16
+    points:16,
+    position:3,
 },
 {
     title:"WETH",
@@ -31,7 +33,8 @@ export const LP_Tokens =[{
     symbol:"FTN-WETH",
     image:"https://polygonscan.com/token/images/wETH_32.png",
     Abi:WethAbi,
-    points:16
+    points:16,
+    position:4,
 },{
     title:"WMATIC",
     address:"0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
@@ -39,7 +42,8 @@ export const LP_Tokens =[{
     symbol:"FTN-WMATIC",
     image:"https://polygonscan.com/token/images/wMatic_32.png",
     Abi:WMaticAbi,
-    points:18
+    points:18,
+    position:5,
 },
 {
     title:"GOLI",
@@ -48,7 +52,8 @@ export const LP_Tokens =[{
     symbol:"FTN-GOLI",
     image:"https://polygonscan.com/token/images/golinenetwork_32.png",
     Abi:GoliAbi,
-    points:16
+    points:16,
+    position:6,
 },
 {
     title:"SAND",
@@ -57,7 +62,8 @@ export const LP_Tokens =[{
     symbol:"FTN-SAND",
     image:"https://polygonscan.com/token/images/sand_32.png",
     Abi:SANDAbi,
-    points:18
+    points:18,
+    position:7,
 },
 
 ]
@@ -69,12 +75,3 @@ Angel:"0x9A4463e514487C597f045Cea84BB4b7D053a3D73",
 RewardToken:"0x76D589B09dcD4C15Af511DcD42a2764a176365e8",
 FountainFactory:"0xDE7DBC03c90b0C6029F435865Cd92212D0e0cAc3"
 }
-/**
- * matic
- * combo
- * usdc
- * bnb
- * weth
- * 0x271d70ED8a1ab6890aFaD1D99e64450972D96a18
- * 
- */
