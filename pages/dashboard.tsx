@@ -74,6 +74,8 @@ const Dashboard = () => {
   const [endTime, setEndTime] = useState("");
   const [userRewards, setUserRewards] = useState(0);
   const [totalRewards, setTotalRewards] = useState(0);
+  const [stakes, setStakes] = useState([])
+
 
   const addCommas = (num) =>
     num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -137,6 +139,7 @@ const Dashboard = () => {
           setEndTime(date);
         }
       );
+      get_user_investments()
     }
   }, [connected]);
 
@@ -192,9 +195,11 @@ const Dashboard = () => {
         address,
       ]).then((data) => {
         let amount = addCommas(ethers.utils.formatEther(data.amount));
+        stakes.push({ amount: amount, image: element.image });
       });
     });
   };
+  //console.log("stakes", stakes)
   return (
     <ThemeProvider theme={theme}>
       <CanvasBackground />
@@ -284,6 +289,20 @@ const Dashboard = () => {
                   >
                     Your Account Stats
                   </Typography>
+                  {stakes.map((value, index) => {
+
+                    return (
+                      <Grid item key={index}>
+                        <Image
+                          src={value.image}
+                          alt="Picture of the token"
+                          width={30}
+                          height={25}
+                        />
+                        <Typography>{value.amount}</Typography>
+                      </Grid>
+                    )
+                  })}
                 </Paper>
               </Container>
             </Grid>
