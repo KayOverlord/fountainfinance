@@ -86,9 +86,8 @@ function Cards(props) {
       .then((results) => {
         props.openStepper(true);
         props.stepNum(1);
-        // console.log("deposit_results",results);
+
         results.wait().then((res) => {
-          console.log("approve_res", res);
           depositToken();
         });
       })
@@ -112,7 +111,6 @@ function Cards(props) {
       .then((results) => {
         props.stepNum(2);
         results.wait().then((res) => {
-          console.log("deposit_res", res);
           stakingToken();
         });
       })
@@ -130,7 +128,6 @@ function Cards(props) {
         setIsStaking(false);
         setDeposit("");
         props.stepNum(3);
-        console.log("join_results", results);
       })
       .catch((error) => {
         setIsStaking(false);
@@ -156,7 +153,6 @@ function Cards(props) {
       ])
         .then((results) => {
           results.wait().then((res) => {
-            console.log("withdraw_res", res);
             setWithdrawLoading(false);
             setBackdropOpen(true);
             setBackdropStatus({
@@ -187,7 +183,6 @@ function Cards(props) {
     ])
       .then((results) => {
         results.wait().then((res) => {
-          console.log("harvest_res", res);
           setHarvestLoading(false);
           setBackdropOpen(true);
           setBackdropStatus({

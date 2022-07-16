@@ -19,7 +19,6 @@ import Cards from "../components/Cards";
 import { LP_Tokens, contracts_address } from "../util/tokens&address";
 import Fountain from "../util/Abi/Fountain.json";
 import Angel from "../util/Abi/Angel.json";
-import styles from "../styles/Home.module.css";
 import { ethers } from "ethers";
 import ReactSvgPieChart from "react-svg-piechart";
 import Image from "next/image";
@@ -29,7 +28,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import CanvasBackground from "../components/CanvasBackground";
-import Footer from "../components/Footer";
+
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -202,7 +201,7 @@ const Dashboard = () => {
       });
     });
   };
-  //console.log("stakes", stakes)
+
   return (
     <ThemeProvider theme={theme}>
       <CanvasBackground />
@@ -404,7 +403,7 @@ const Dashboard = () => {
                             // If you need custom behavior when sector is hovered (or touched)
                             onSectorHover={(d, i, e) => {
                               if (d) {
-                                console.log("Data:", d.title);
+                                console.log("Pie:", d.title);
                               }
                             }}
                           />
