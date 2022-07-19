@@ -18,17 +18,12 @@ const Home = ({ timeout = 50 }) => {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
 
-  useEffect(() => {
-    if (connected == true) {
-      router.push("/dashboard");
-    }
-  }, [!connected]);
-
   const startConnecting = () => {
     setLoading(true);
     connectWallet(
       (handleSuccess) => {
         //log success
+        router.push("/dashboard");
       },
       (handleErrors) => {
         setLoading(false);

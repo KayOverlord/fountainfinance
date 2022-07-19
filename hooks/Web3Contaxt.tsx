@@ -18,6 +18,7 @@ export const Web3Provider = ({ children }) => {
   const [library, setLibrary] = useState(null);
   const [signer, setSigner] = useState(null);
   const [walletBalance, setWalletBalance] = useState(null);
+  const [callBackResults, setCallBackResults] = useState(null);
 
   useEffect(() => {
     const sub = async () => {
@@ -34,12 +35,13 @@ export const Web3Provider = ({ children }) => {
 
   useEffect(() => {
     const handleAccountsChanged = (accounts) => {
-      if (accounts.length > 0) {
-        setConnected(true);
-        setAddress(accounts);
-      } else {
-        setConnected(false);
-      }
+      // if (accounts.length > 0) {
+      //   setConnected(true);
+      //   setAddress(accounts);
+      // } else {
+      //   setConnected(false);
+      // }
+      handleDisconnect();
     };
 
     const handleChainChanged = (chainId) => {
@@ -151,14 +153,18 @@ export const Web3Provider = ({ children }) => {
     Abi: [],
     ContractAddress: string,
     methodName: string,
-    params: []
+    params: [],
+    onSuccess,
+    onError
   ) => {
     var myContract = new ethers.Contract(ContractAddress, Abi, signer);
 
     //const feeData = await provider.getFeeData();
 
     if (params?.length) {
-      return await myContract[methodName](...params).then(callback);
+      return await myContract[methodName](...params).then(
+        callback(onSuccess, onError)
+      );
     }
   };
   /**
@@ -193,7 +199,7 @@ export const Web3Provider = ({ children }) => {
     return await MyContract.balanceOf(contract).then(callback);
   };
 
-  const callback = async (result, error, receipt) => {
+  const callback = async (result, error) => {
     if (result) {
       return result;
     }
@@ -216,6 +222,8 @@ export const Web3Provider = ({ children }) => {
     get_contract_data,
     get_balance,
     walletBalance,
+    callBackResults,
+    setCallBackResults,
   };
   return <context.Provider value={values}>{children}</context.Provider>;
 };

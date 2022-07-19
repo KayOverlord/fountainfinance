@@ -33,7 +33,7 @@ function Cards(props) {
   const [withdraw, setWithdraw] = useState("");
   const [WithdrawError, setWithdrawError] = useState(false);
   const [WithdrawErrorMessage, setWithdrawErrorMessage] = useState("");
-  const { send_transaction } = useWeb3();
+  const { send_transaction, setCallBackResults } = useWeb3();
   const [open, setOpen] = useState(false);
   const [isStaking, setIsStaking] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -128,6 +128,7 @@ function Cards(props) {
         setIsStaking(false);
         setDeposit("");
         props.stepNum(3);
+        setCallBackResults("staking");
       })
       .catch((error) => {
         setIsStaking(false);
@@ -159,6 +160,7 @@ function Cards(props) {
               icon: "success",
               message: "Done! your tokens have been successfully withdrawn",
             });
+            setCallBackResults("withdraw");
           });
         })
         .catch((error) => {
@@ -189,6 +191,7 @@ function Cards(props) {
             icon: "success",
             message: "Done! your rewards have been successfully harvested!",
           });
+          setCallBackResults("harvest");
         });
       })
       .catch((error) => {
