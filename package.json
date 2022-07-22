@@ -6,7 +6,8 @@
     "build": "next build && next export",
     "start": "next start",
     "lint": "next lint",
-    "test-host":"firebase hosting:channel:deploy preview_name",
+    "test-host": "firebase hosting:channel:deploy preview_name",
+    "deploy": "firebase deploy --only hosting",
     "web3-abi": "abi-types-generator './util/Abi/Angel.json' --output='./util/Abi/generated-types' --name=Angel"
   },
   "dependencies": {

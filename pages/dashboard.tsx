@@ -31,6 +31,7 @@ import CanvasBackground from "../components/CanvasBackground";
 
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CircularProgress from "@mui/material/CircularProgress";
+import { usePullWeb3 } from "../hooks/PullDataContaxt";
 
 const drawerWidth: number = 240;
 interface AppBarProps extends MuiAppBarProps {
@@ -66,6 +67,8 @@ const Dashboard = () => {
     get_contract_data,
     get_balance,
   } = useWeb3();
+  const { get_user_investments, stakes, rewards, get_user_rewards } =
+    usePullWeb3();
   const router = useRouter();
 
   const [gracePerSecond, setGracePerSecond] = useState("0");
@@ -73,7 +76,6 @@ const Dashboard = () => {
   const [endTime, setEndTime] = useState("");
   const [userRewards, setUserRewards] = useState(0);
   const [totalRewards, setTotalRewards] = useState(0);
-  const [stakes, setStakes] = useState([]);
 
   const addCommas = (num) =>
     num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -138,6 +140,7 @@ const Dashboard = () => {
         }
       );
       get_user_investments();
+      get_user_rewards();
     }
   }, [connected]);
 
@@ -184,22 +187,6 @@ const Dashboard = () => {
     } catch (e) {
       //
     }
-  };
-
-  const get_user_investments = () => {
-    LP_Tokens.forEach((element) => {
-      get_contract_data(Angel, contracts_address.Angel, "userInfo", [
-        element.position,
-        address,
-      ]).then((data) => {
-        let amount = addCommas(ethers.utils.formatEther(data.amount));
-        stakes.push({
-          amount: amount,
-          image: element.image,
-          title: element.title,
-        });
-      });
-    });
   };
 
   return (
@@ -289,33 +276,78 @@ const Dashboard = () => {
                     variant={"h4"}
                     display="block"
                   >
-                    Your Account Stakes
+                    Your staked tokens
                   </Typography>
-                  {stakes &&
-                    stakes.map((value, index) => {
-                      return value.amount > 0 ? (
-                        <Grid
-                          item
-                          key={index}
-                          mt={2}
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "flex-start",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Image
-                            src={value.image}
-                            alt="Picture of the token"
-                            width={45}
-                            height={45}
-                          />
-                          <Typography pl={2}>{value.title} stake:</Typography>
-                          <Typography pl={1}>{value.amount}</Typography>
-                        </Grid>
-                      ) : null;
-                    })}
+                  {stakes.map((value, index) => {
+                    return value.amount > 0 ? (
+                      <Grid
+                        item
+                        key={index}
+                        mt={2}
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Image
+                          src={value.image}
+                          alt="Picture of the token"
+                          width={45}
+                          height={45}
+                        />
+                        <Typography pl={2}>{value.title} stake:</Typography>
+                        <Typography pl={1}>{value.amount}</Typography>
+                      </Grid>
+                    ) : null;
+                  })}
+                  <Typography
+                    style={{
+                      textTransform: "none",
+                      lineHeight: "normal",
+                      color: "white",
+                      marginTop: 8,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textDecoration: "underline",
+                    }}
+                    variant={"h4"}
+                    display="block"
+                  >
+                    Your rewards
+                  </Typography>
+                  {rewards.map((value, index) => {
+                    return value.amount > 0 ? (
+                      <Grid
+                        item
+                        key={index}
+                        mt={2}
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Image
+                          src={value.image}
+                          alt="Picture of the token"
+                          width={45}
+                          height={45}
+                        />
+                        <Typography px={1}> = </Typography>
+                        <Image
+                          src={LP_Tokens[4].image}
+                          alt="Picture of the token"
+                          width={20}
+                          height={20}
+                        />
+                        <Typography pl={1}>{value.amount}</Typography>
+                      </Grid>
+                    ) : null;
+                  })}
                 </Paper>
               </Container>
             </Grid>

@@ -25,6 +25,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { usePullWeb3 } from "../hooks/PullDataContaxt";
 
 function Cards(props) {
   const [depositError, setError] = useState(false);
@@ -48,6 +49,8 @@ function Cards(props) {
   const fountainAddress = LP_Tokens[props.id].Fountain_address;
   const TokenAddress = LP_Tokens[props.id].address;
   const TokenAbi = LP_Tokens[props.id].Abi;
+
+  const { get_user_investments, stakes, setStakes } = usePullWeb3();
 
   const handleBackdropOpenClose = () => {
     setBackdropOpen(false);
@@ -128,7 +131,9 @@ function Cards(props) {
         setIsStaking(false);
         setDeposit("");
         props.stepNum(3);
-        setCallBackResults("staking");
+        setStakes([]);
+
+        get_user_investments();
       })
       .catch((error) => {
         setIsStaking(false);
@@ -160,7 +165,9 @@ function Cards(props) {
               icon: "success",
               message: "Done! your tokens have been successfully withdrawn",
             });
-            setCallBackResults("withdraw");
+            setStakes([]);
+            setWithdraw("");
+            get_user_investments();
           });
         })
         .catch((error) => {
@@ -191,7 +198,9 @@ function Cards(props) {
             icon: "success",
             message: "Done! your rewards have been successfully harvested!",
           });
-          setCallBackResults("harvest");
+          setStakes([]);
+
+          get_user_investments();
         });
       })
       .catch((error) => {
