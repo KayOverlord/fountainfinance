@@ -259,95 +259,125 @@ const Dashboard = () => {
                     p: 2,
                     display: "flex",
                     flexDirection: "column",
-                    minHeight: 340,
+                    minHeight: 200,
                   }}
                 >
-                  <Typography
+                  <div
                     style={{
-                      textTransform: "none",
-                      lineHeight: "normal",
-                      color: "white",
-                      marginTop: 8,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textDecoration: "underline",
+                      minHeight: 200,
+
+                      paddingRight: 1,
+                      paddingLeft: 1,
                     }}
-                    variant={"h4"}
-                    display="block"
                   >
-                    Your staked tokens
-                  </Typography>
-                  {stakes.map((value, index) => {
-                    return value.amount > 0 ? (
-                      <Grid
-                        item
-                        key={index}
-                        mt={2}
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "flex-start",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Image
-                          src={value.image}
-                          alt="Picture of the token"
-                          width={45}
-                          height={45}
-                        />
-                        <Typography pl={2}>{value.title} stake:</Typography>
-                        <Typography pl={1}>{value.amount}</Typography>
-                      </Grid>
-                    ) : null;
-                  })}
-                  <Typography
+                    <Typography
+                      style={{
+                        textTransform: "none",
+                        lineHeight: "normal",
+                        color: "white",
+                        marginTop: 8,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textDecoration: "underline",
+                      }}
+                      variant={"h4"}
+                      display="block"
+                    >
+                      Your staked tokens
+                    </Typography>
+                    {stakes.map((value, index) => {
+                      return value.amount > 0 ? (
+                        <Grid
+                          item
+                          key={index}
+                          mt={2}
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Image
+                            src={value.image}
+                            alt="Picture of the token"
+                            width={45}
+                            height={45}
+                          />
+                          <Typography pl={2}>{value.title} stake:</Typography>
+                          <Typography pl={1}>{value.amount}</Typography>
+                        </Grid>
+                      ) : null;
+                    })}
+                  </div>
+                </Paper>
+              </Container>
+              <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    minHeight: 200,
+                  }}
+                >
+                  <div
                     style={{
-                      textTransform: "none",
-                      lineHeight: "normal",
-                      color: "white",
-                      marginTop: 8,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textDecoration: "underline",
+                      minHeight: 200,
+
+                      paddingRight: 1,
+                      paddingLeft: 1,
                     }}
-                    variant={"h4"}
-                    display="block"
                   >
-                    Your rewards
-                  </Typography>
-                  {rewards.map((value, index) => {
-                    return value.amount > 0 ? (
-                      <Grid
-                        item
-                        key={index}
-                        mt={2}
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "flex-start",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Image
-                          src={value.image}
-                          alt="Picture of the token"
-                          width={45}
-                          height={45}
-                        />
-                        <Typography px={1}> = </Typography>
-                        <Image
-                          src={LP_Tokens[4].image}
-                          alt="Picture of the token"
-                          width={20}
-                          height={20}
-                        />
-                        <Typography pl={1}>{value.amount}</Typography>
-                      </Grid>
-                    ) : null;
-                  })}
+                    <Typography
+                      align="center"
+                      style={{
+                        textTransform: "none",
+                        lineHeight: "normal",
+                        color: "white",
+                        marginTop: 8,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textDecoration: "underline",
+                      }}
+                      variant={"h4"}
+                      display="block"
+                    >
+                      Your rewards from staked tokens
+                    </Typography>
+                    {rewards.map((value, index) => {
+                      return value.amount > 0 ? (
+                        <Grid
+                          item
+                          key={index}
+                          mt={2}
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Image
+                            src={value.image}
+                            alt="Picture of the token"
+                            width={45}
+                            height={45}
+                          />
+                          <Typography px={1}> = </Typography>
+                          <Image
+                            src={LP_Tokens[4].image}
+                            alt="Picture of the token"
+                            width={20}
+                            height={20}
+                          />
+                          <Typography pl={1}>{value.amount}</Typography>
+                        </Grid>
+                      ) : null;
+                    })}
+                  </div>
                 </Paper>
               </Container>
             </Grid>
