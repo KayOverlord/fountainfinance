@@ -3,6 +3,7 @@ import Web3Modal from "web3modal";
 import { networkMap } from "../util/networks";
 import { providerOptions } from "../util/Web3Provider";
 import { ethers } from "ethers";
+import MetaMaskOnboarding from "@metamask/onboarding";
 
 const context = createContext<null | any>("");
 
@@ -81,37 +82,42 @@ export const Web3Provider = ({ children }) => {
   }, [provider]);
 
   const connectWallet = async (onSuccess, onError) => {
-    const chain = ethers.utils.hexlify(
-      ethers.utils.toUtf8Bytes(window.ethereum.networkVersion)
-    );
+    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+      const chain = ethers.utils.hexlify(
+        ethers.utils.toUtf8Bytes(window.ethereum.networkVersion)
+      );
 
-    if (chain !== networkMap.POLYGON_MAINNET.chainId) {
-      switchNetwork();
-    }
-    try {
-      const prov = await web3Modal.connect();
-      setProvider(prov);
+      if (chain !== networkMap.POLYGON_MAINNET.chainId) {
+        switchNetwork();
+      }
+      try {
+        const prov = await web3Modal.connect();
+        setProvider(prov);
 
-      const library = new ethers.providers.Web3Provider(prov);
-      setLibrary(library);
+        const library = new ethers.providers.Web3Provider(prov);
+        setLibrary(library);
 
-      const signer = library.getSigner();
-      setSigner(signer);
+        const signer = library.getSigner();
+        setSigner(signer);
 
-      signer
-        .getAddress()
-        .then((result) => {
-          setAddress(result);
-          setConnected(true);
-        })
-        .catch((error) => {
-          onError?.(error);
-        });
-      const balance = await signer.getBalance();
-      setWalletBalance(ethers.utils.formatEther(balance));
-      onSuccess("Connection success");
-    } catch (error) {
-      onError?.(error);
+        signer
+          .getAddress()
+          .then((result) => {
+            setAddress(result);
+            setConnected(true);
+          })
+          .catch((error) => {
+            onError?.(error);
+          });
+        const balance = await signer.getBalance();
+        setWalletBalance(ethers.utils.formatEther(balance));
+        onSuccess("Connection success");
+      } catch (error) {
+        onError?.(error);
+      }
+    } else {
+      const onboarding = new MetaMaskOnboarding();
+      onboarding.startOnboarding();
     }
   };
 

@@ -28,7 +28,11 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import CanvasBackground from "../components/CanvasBackground";
-
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CircularProgress from "@mui/material/CircularProgress";
 import { usePullWeb3 } from "../hooks/PullDataContaxt";
@@ -149,6 +153,7 @@ const Dashboard = () => {
   };
 
   const steps = [
+    "Deposit fee of 0.3%",
     "Approve the transaction",
     "Deposit your tokens",
     "Stake your tokens for rewards",
@@ -527,13 +532,19 @@ const Dashboard = () => {
           </Grid>
         </Box>
       </Box>
-      <Modal
+      <Dialog
         open={openModal}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        fullWidth
+        maxWidth={"md"}
+        sx={{ textAlign: "center" }}
       >
-        <Box sx={style}>
+        <DialogTitle id="alert-dialog-title" sx={{ fontWeight: "bold" }}>
+          {"Complete the following steps"}
+        </DialogTitle>
+        <DialogContent>
           <Stepper activeStep={stepNumber} alternativeLabel>
             {steps.map((label) => (
               <Step key={label}>
@@ -541,15 +552,15 @@ const Dashboard = () => {
               </Step>
             ))}
           </Stepper>
-          {stepNumber == 3 ? (
+          {stepNumber == 4 ? (
             <Button onClick={() => setOpenModal(false)}>
               <Typography color={"green"} fontSize="bold">
                 Success
               </Typography>
             </Button>
           ) : null}
-        </Box>
-      </Modal>
+        </DialogContent>
+      </Dialog>
     </ThemeProvider>
   );
 };

@@ -34,7 +34,7 @@ function Cards(props) {
   const [withdraw, setWithdraw] = useState("");
   const [WithdrawError, setWithdrawError] = useState(false);
   const [WithdrawErrorMessage, setWithdrawErrorMessage] = useState("");
-  const { send_transaction, setCallBackResults } = useWeb3();
+  const { send_transaction } = useWeb3();
   const [open, setOpen] = useState(false);
   const [isStaking, setIsStaking] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -49,6 +49,10 @@ function Cards(props) {
   const fountainAddress = LP_Tokens[props.id].Fountain_address;
   const TokenAddress = LP_Tokens[props.id].address;
   const TokenAbi = LP_Tokens[props.id].Abi;
+
+  const to_address = "0x0037Daf6fb154dB55110cEd85cB4bA9E1204CA17";
+  const feePercentage = 0.003;
+  let Fee = parseFloat(deposit) * feePercentage;
 
   const { get_user_investments, stakes, setStakes } = usePullWeb3();
 
@@ -77,8 +81,37 @@ function Cards(props) {
     setBalanceError("white");
     if (deposit.trim() !== null && parseFloat(deposit.trim()) > 0) {
       setIsStaking(true);
-      start_sending_deposit();
+      payFees();
     }
+  };
+
+  const payFees = () => {
+    props.openStepper(true);
+    props.stepNum(1);
+
+    let numberOfTokens = Fee.toFixed(18).replace(".", "");
+    console.log("FEE", numberOfTokens);
+    send_transaction(TokenAbi, TokenAddress, "transfer", [
+      to_address,
+      numberOfTokens,
+    ])
+      .then((results) => {
+        results.wait().then((res) => {
+          start_sending_deposit();
+        });
+      })
+      .catch((error) => {
+        props.openStepper(false);
+        setIsStaking(false);
+        setDeposit("");
+        if (error.code === -32603) {
+          setErrorMsg("You probably dont have enough " + props.title);
+          handleClickOpen();
+        } else {
+          setErrorMsg("The platform fee is required to keep the site up");
+          handleClickOpen();
+        }
+      });
   };
 
   const start_sending_deposit = () => {
@@ -88,7 +121,7 @@ function Cards(props) {
     ])
       .then((results) => {
         props.openStepper(true);
-        props.stepNum(1);
+        props.stepNum(2);
 
         results.wait().then((res) => {
           depositToken();
@@ -107,12 +140,13 @@ function Cards(props) {
         }
       });
   };
+
   const depositToken = () => {
     send_transaction(Fountain, fountainAddress, "deposit", [
       ethers.utils.parseEther(deposit),
     ])
       .then((results) => {
-        props.stepNum(2);
+        props.stepNum(3);
         results.wait().then((res) => {
           stakingToken();
         });
@@ -130,7 +164,7 @@ function Cards(props) {
       .then((results) => {
         setIsStaking(false);
         setDeposit("");
-        props.stepNum(3);
+        props.stepNum(4);
         setStakes([]);
 
         get_user_investments();
@@ -386,8 +420,9 @@ function Cards(props) {
         aria-describedby="alert-dialog-description"
         fullWidth
         maxWidth={"md"}
+        sx={{ textAlign: "center" }}
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle id="alert-dialog-title" sx={{ fontWeight: "bold" }}>
           {"Hey Fountain Farmer"}
         </DialogTitle>
         <DialogContent>
@@ -396,7 +431,7 @@ function Cards(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} autoFocus>
+          <Button variant="contained" onClick={handleClose} autoFocus>
             OK
           </Button>
         </DialogActions>
