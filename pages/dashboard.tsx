@@ -36,6 +36,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CircularProgress from "@mui/material/CircularProgress";
 import { usePullWeb3 } from "../hooks/PullDataContaxt";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const drawerWidth: number = 240;
 interface AppBarProps extends MuiAppBarProps {
@@ -275,6 +276,13 @@ const Dashboard = () => {
                       paddingLeft: 1,
                     }}
                   >
+                    <Button
+                      variant="outlined"
+                      endIcon={<RefreshIcon />}
+                      onClick={() => get_user_investments()}
+                    >
+                      Refresh
+                    </Button>
                     <Typography
                       style={{
                         textTransform: "none",

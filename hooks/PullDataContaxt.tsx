@@ -15,9 +15,9 @@ export const PullWeb3Provider = ({ children }) => {
   const [stakes, setStakes] = useState([]);
   const [rewards, setRewards] = useState([]);
 
-  const get_user_investments = async () => {
+  const get_user_investments = () => {
     setStakes([]);
-    await LP_Tokens.forEach((element) => {
+    LP_Tokens.forEach((element) => {
       get_contract_data(Angel, contracts_address.Angel, "userInfo", [
         element.position,
         address,
