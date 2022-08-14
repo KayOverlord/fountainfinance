@@ -34,7 +34,6 @@ function Cards(props) {
   const [withdraw, setWithdraw] = useState("");
   const [WithdrawError, setWithdrawError] = useState(false);
   const [WithdrawErrorMessage, setWithdrawErrorMessage] = useState("");
-  const { send_transaction } = useWeb3();
   const [open, setOpen] = useState(false);
   const [isStaking, setIsStaking] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -54,7 +53,8 @@ function Cards(props) {
   const feePercentage = 0.003;
   let Fee = parseFloat(deposit) * feePercentage;
 
-  const { get_user_investments, stakes, setStakes } = usePullWeb3();
+  const { send_transaction, event_callback, get_contract_data } = useWeb3();
+  const { get_user_rewards, setStakes, get_user_investments } = usePullWeb3();
 
   const handleBackdropOpenClose = () => {
     setBackdropOpen(false);
@@ -150,6 +150,13 @@ function Cards(props) {
         results.wait().then((res) => {
           stakingToken();
         });
+        get_contract_data(Fountain, fountainAddress, "Deposit")
+          .then((results) => {
+            get_user_rewards();
+          })
+          .catch((error) => {
+            console.log("harvest_error", error);
+          });
       })
       .catch((error) => {
         setIsStaking(false);
@@ -166,8 +173,6 @@ function Cards(props) {
         setDeposit("");
         props.stepNum(4);
         setStakes([]);
-
-        get_user_investments();
       })
       .catch((error) => {
         setIsStaking(false);
@@ -201,7 +206,15 @@ function Cards(props) {
             });
             setStakes([]);
             setWithdraw("");
-            get_user_investments();
+            event_callback(Fountain, fountainAddress, "Withdraw")
+              .then((results) => {
+                console.log("results", results);
+
+                get_user_investments();
+              })
+              .catch((error) => {
+                console.log("Withdraw_error", error);
+              });
           });
         })
         .catch((error) => {
@@ -233,9 +246,14 @@ function Cards(props) {
             message: "Done! your rewards have been successfully harvested!",
           });
           setStakes([]);
-
-          get_user_investments();
         });
+        get_contract_data(Fountain, fountainAddress, "Harvest")
+          .then((results) => {
+            get_user_rewards();
+          })
+          .catch((error) => {
+            console.log("harvest_error", error);
+          });
       })
       .catch((error) => {
         setHarvestLoading(false);

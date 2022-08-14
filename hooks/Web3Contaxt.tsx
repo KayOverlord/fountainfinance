@@ -19,7 +19,6 @@ export const Web3Provider = ({ children }) => {
   const [library, setLibrary] = useState(null);
   const [signer, setSigner] = useState(null);
   const [walletBalance, setWalletBalance] = useState(null);
-  const [callBackResults, setCallBackResults] = useState(null);
 
   useEffect(() => {
     const sub = async () => {
@@ -205,6 +204,15 @@ export const Web3Provider = ({ children }) => {
     return await MyContract.balanceOf(contract).then(callback);
   };
 
+  const event_callback = async (
+    Abi: [],
+    ContractAddress: string,
+    eventName: string
+  ) => {
+    var MyContract = new ethers.Contract(ContractAddress, Abi, library);
+    return await MyContract.on(eventName, callback);
+  };
+
   const callback = async (result, error) => {
     if (result) {
       return result;
@@ -214,7 +222,7 @@ export const Web3Provider = ({ children }) => {
       return error;
     }
 
-    return "0";
+    return false;
   };
 
   const values = {
@@ -228,8 +236,7 @@ export const Web3Provider = ({ children }) => {
     get_contract_data,
     get_balance,
     walletBalance,
-    callBackResults,
-    setCallBackResults,
+    event_callback,
   };
   return <context.Provider value={values}>{children}</context.Provider>;
 };
