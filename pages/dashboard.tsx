@@ -19,7 +19,6 @@ import Cards from "../components/Cards";
 import { LP_Tokens, contracts_address } from "../util/tokens&address";
 import Fountain from "../util/Abi/Fountain.json";
 import Angel from "../util/Abi/Angel.json";
-import styles from "../styles/Home.module.css";
 import { ethers } from "ethers";
 import ReactSvgPieChart from "react-svg-piechart";
 import Image from "next/image";
@@ -29,9 +28,15 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import CanvasBackground from "../components/CanvasBackground";
-import Footer from "../components/Footer";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CircularProgress from "@mui/material/CircularProgress";
+import { usePullWeb3 } from "../hooks/PullDataContaxt";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const drawerWidth: number = 240;
 interface AppBarProps extends MuiAppBarProps {
@@ -67,26 +72,29 @@ const Dashboard = () => {
     get_contract_data,
     get_balance,
   } = useWeb3();
+  const { get_user_investments, stakes, rewards, get_user_rewards } =
+    usePullWeb3();
   const router = useRouter();
 
   const [gracePerSecond, setGracePerSecond] = useState("0");
   const [balance, setBalance] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [userInfo, setUserInfo] = useState({ amount: 0, rewards: 0 });
+  const [userRewards, setUserRewards] = useState(0);
+  const [totalRewards, setTotalRewards] = useState(0);
 
   const addCommas = (num) =>
     num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeNonNumeric = (num) => num.toString().replace(/[^0-9]/g, "");
   const data = [
     {
-      title: "Amount",
-      value: userInfo.amount,
-      color: theme.palette.primary.main,
+      title: "Your Rewards: " + addCommas(userRewards),
+      value: userRewards,
+      color: theme.palette.secondary.main,
     },
     {
-      title: "Rewards",
-      value: userInfo.rewards,
-      color: theme.palette.secondary.main,
+      title: "Total Rewards: " + addCommas(totalRewards),
+      value: totalRewards,
+      color: theme.palette.primary.main,
     },
   ];
   const style = {
@@ -119,16 +127,7 @@ const Dashboard = () => {
           setGracePerSecond(ethers.utils.formatEther(data));
         }
       );
-
-      get_contract_data(Angel, contracts_address.Angel, "userInfo", [
-        "0",
-        address,
-      ]).then((data) => {
-        let amount = parseInt(data.amount);
-        let rewards = parseInt(data.rewardDebt);
-
-        setUserInfo({ amount, rewards });
-      });
+      get_userInfo();
 
       get_balance(
         Fountain,
@@ -136,6 +135,7 @@ const Dashboard = () => {
         contracts_address.Angel
       ).then((data) => {
         setBalance(addCommas(ethers.utils.formatEther(data)));
+        setTotalRewards(parseInt(ethers.utils.formatEther(data)));
       });
 
       get_contract_data(Angel, contracts_address.Angel, "endTime").then(
@@ -144,6 +144,8 @@ const Dashboard = () => {
           setEndTime(date);
         }
       );
+      get_user_investments();
+      get_user_rewards();
     }
   }, [connected]);
 
@@ -152,12 +154,13 @@ const Dashboard = () => {
   };
 
   const steps = [
+    "Deposit fee of 0.3%",
     "Approve the transaction",
     "Deposit your tokens",
     "Stake your tokens for rewards",
   ];
 
-  function ontoStepIcon(props: any) {
+  const ontoStepIcon = (props: any) => {
     const { active, completed, className } = props;
 
     return (
@@ -169,7 +172,29 @@ const Dashboard = () => {
         )}
       </>
     );
-  }
+  };
+
+  const get_userInfo = async () => {
+    let amount = 0;
+
+    try {
+      for (let index = 0; index < LP_Tokens.length; index++) {
+        const element = LP_Tokens[index];
+
+        get_contract_data(Angel, contracts_address.Angel, "pendingGrace", [
+          element.position,
+          address,
+        ]).then((data) => {
+          amount = amount + parseInt(ethers.utils.formatEther(data));
+
+          setUserRewards(amount);
+        });
+      }
+    } catch (e) {
+      //
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CanvasBackground />
@@ -240,25 +265,132 @@ const Dashboard = () => {
                     p: 2,
                     display: "flex",
                     flexDirection: "column",
-                    minHeight: 340,
+                    minHeight: 200,
                   }}
                 >
-                  <Typography
+                  <div
                     style={{
-                      textTransform: "none",
-                      lineHeight: "normal",
-                      color: "white",
-                      marginTop: 8,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textDecoration: "underline",
+                      minHeight: 200,
+
+                      paddingRight: 1,
+                      paddingLeft: 1,
                     }}
-                    variant={"h4"}
-                    display="block"
                   >
-                    Your Account Stats
-                  </Typography>
+                    <Button
+                      variant="outlined"
+                      endIcon={<RefreshIcon />}
+                      onClick={() => get_user_investments()}
+                    >
+                      Refresh
+                    </Button>
+                    <Typography
+                      style={{
+                        textTransform: "none",
+                        lineHeight: "normal",
+                        color: "white",
+                        marginTop: 8,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textDecoration: "underline",
+                      }}
+                      variant={"h4"}
+                      display="block"
+                    >
+                      Your staked tokens
+                    </Typography>
+                    {stakes.map((value, index) => {
+                      return value.amount > 0 ? (
+                        <Grid
+                          item
+                          key={index}
+                          mt={2}
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Image
+                            src={value.image}
+                            alt="Picture of the token"
+                            width={45}
+                            height={45}
+                          />
+                          <Typography pl={2}>{value.title} stake:</Typography>
+                          <Typography pl={1}>{value.amount}</Typography>
+                        </Grid>
+                      ) : null;
+                    })}
+                  </div>
+                </Paper>
+              </Container>
+              <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    minHeight: 200,
+                  }}
+                >
+                  <div
+                    style={{
+                      minHeight: 200,
+
+                      paddingRight: 1,
+                      paddingLeft: 1,
+                    }}
+                  >
+                    <Typography
+                      align="center"
+                      style={{
+                        textTransform: "none",
+                        lineHeight: "normal",
+                        color: "white",
+                        marginTop: 8,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textDecoration: "underline",
+                      }}
+                      variant={"h4"}
+                      display="block"
+                    >
+                      Your rewards from staked tokens
+                    </Typography>
+                    {rewards.map((value, index) => {
+                      return value.amount > 0 ? (
+                        <Grid
+                          item
+                          key={index}
+                          mt={2}
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Image
+                            src={value.image}
+                            alt="Picture of the token"
+                            width={45}
+                            height={45}
+                          />
+                          <Typography px={1}> = </Typography>
+                          <Image
+                            src={LP_Tokens[4].image}
+                            alt="Picture of the token"
+                            width={20}
+                            height={20}
+                          />
+                          <Typography pl={1}>{value.amount}</Typography>
+                        </Grid>
+                      ) : null;
+                    })}
+                  </div>
                 </Paper>
               </Container>
             </Grid>
@@ -338,7 +470,7 @@ const Dashboard = () => {
                         </Grid>
                         <Grid item xs={12} md={4}>
                           <ReactSvgPieChart
-                            strokeWidth={0}
+                            strokeWidth={0.1}
                             data={data}
                             startAngle={90}
                             // If you need expand on hover (or touch) effect
@@ -346,7 +478,7 @@ const Dashboard = () => {
                             // If you need custom behavior when sector is hovered (or touched)
                             onSectorHover={(d, i, e) => {
                               if (d) {
-                                console.log("Data:", d.title);
+                                console.log("Pie:", d.title);
                               }
                             }}
                           />
@@ -408,13 +540,19 @@ const Dashboard = () => {
           </Grid>
         </Box>
       </Box>
-      <Modal
+      <Dialog
         open={openModal}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        fullWidth
+        maxWidth={"md"}
+        sx={{ textAlign: "center" }}
       >
-        <Box sx={style}>
+        <DialogTitle id="alert-dialog-title" sx={{ fontWeight: "bold" }}>
+          {"Complete the following steps"}
+        </DialogTitle>
+        <DialogContent>
           <Stepper activeStep={stepNumber} alternativeLabel>
             {steps.map((label) => (
               <Step key={label}>
@@ -422,15 +560,15 @@ const Dashboard = () => {
               </Step>
             ))}
           </Stepper>
-          {stepNumber == 3 ? (
+          {stepNumber == 4 ? (
             <Button onClick={() => setOpenModal(false)}>
               <Typography color={"green"} fontSize="bold">
                 Success
               </Typography>
             </Button>
           ) : null}
-        </Box>
-      </Modal>
+        </DialogContent>
+      </Dialog>
     </ThemeProvider>
   );
 };

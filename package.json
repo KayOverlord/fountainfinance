@@ -6,12 +6,15 @@
     "build": "next build && next export",
     "start": "next start",
     "lint": "next lint",
+    "test-host": "firebase hosting:channel:deploy preview_name",
+    "deploy": "firebase deploy --only hosting",
     "web3-abi": "abi-types-generator './util/Abi/Angel.json' --output='./util/Abi/generated-types' --name=Angel"
   },
   "dependencies": {
     "@burner-wallet/burner-connect-provider": "^0.1.1",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@metamask/onboarding": "^1.0.1",
     "@mui/icons-material": "^5.3.1",
     "@mui/lab": "^5.0.0-alpha.90",
     "@mui/material": "^5.4.0",
